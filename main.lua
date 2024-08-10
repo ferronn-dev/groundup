@@ -24,6 +24,9 @@ local handlers = {
       state.loaded = true
     end
   end,
+  CONSOLE_MESSAGE = function(s)
+    print('console: ' .. s)
+  end,
   PLAYER_STARTED_MOVING = function()
     assert(not state.moving)
     state.moving = true
