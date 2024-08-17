@@ -1,0 +1,16 @@
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.6.0
+  hooks:
+  - id: check-toml
+  - id: check-yaml
+  - id: end-of-file-fixer
+  - id: trailing-whitespace
+- repo: https://github.com/JohnnyMorganz/StyLua
+  rev: v0.20.0
+  hooks:
+  - id: stylua-github
+- repo: meta
+  hooks:
+  - id: check-hooks-apply
+  - id: check-useless-excludes
