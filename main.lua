@@ -1,11 +1,21 @@
 local thisAddonName = ...
 
 local state = {
+  chatchannels = {},
   cursor = 0,
   loaded = false,
   moving = false,
   turning = false,
 }
+
+local function ensuret(t, k)
+  local v = t[k]
+  if not v then
+    v = {}
+    t[k] = v
+  end
+  return v
+end
 
 local print = (function()
   local m = CreateFrame('MessageFrame')
@@ -75,6 +85,12 @@ local handlers = {
   UI_ERROR_MESSAGE = function(_, s)
     print('ERROR: ' .. s)
   end,
+  UPDATE_CHAT_COLOR = function(name, r, g, b)
+    Mixin(ensuret(state.chatchannels, name), { r = r, g = g, b = b })
+  end,
+  UPDATE_CHAT_COLOR_NAME_BY_CLASS = function(name, colorNameByClass)
+    Mixin(ensuret(state.chatchannels, name), { colorNameByClass = colorNameByClass })
+  end,
 }
 
 local f = CreateFrame('Frame')
@@ -105,5 +121,5 @@ GroundUp = {
       UIParent:SetParent(not UIParent:GetParent() and hidden or nil)
       UIParent:SetAllPoints()
     end,
-  }
+  },
 }
