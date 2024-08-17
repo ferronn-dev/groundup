@@ -67,6 +67,11 @@ local handlers = {
   CVAR_UPDATE = function(eventName, value)
     print('[cvar] ' .. eventName .. ': ' .. value)
   end,
+  MODIFIER_STATE_CHANGED = function()
+    -- This is not reliable since Is*KeyDown functions can get out of sync
+    -- with these events, e.g. Alt-Tabbing out of the game releases the
+    -- modifier per IsAltKeyDown but a corresponding event does not fire.
+  end,
   PLAYER_STARTED_MOVING = function()
     assert(not state.moving)
     state.moving = true
