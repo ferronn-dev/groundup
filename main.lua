@@ -64,6 +64,9 @@ local handlers = {
       print('cursor: ' .. old .. ' -> ' .. new)
     end
   end,
+  CVAR_UPDATE = function(eventName, value)
+    print('[cvar] ' .. eventName .. ': ' .. value)
+  end,
   PLAYER_STARTED_MOVING = function()
     assert(not state.moving)
     state.moving = true
