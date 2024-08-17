@@ -1,6 +1,8 @@
 local thisAddonName = ...
 
 local state = {
+  bindings = {},
+  bindkeys = {},
   chatchannels = {},
   cursor = 0,
   loaded = false,
@@ -20,7 +22,7 @@ end
 local print = (function()
   local m = CreateFrame('MessageFrame')
   m:SetAllPoints()
-  m:SetFontObject(GameFontNormalLeft)
+  m:SetFontObject(GameFontNormalSmallLeft)
   m:SetTimeVisible(3.402823e38)
   local tick = 0
   m:SetScript('OnUpdate', function()
@@ -43,7 +45,7 @@ local handlers = {
     end
   end,
   CONSOLE_MESSAGE = function(s)
-    print('console: ' .. s)
+    print('[console] ' .. s)
   end,
   CURSOR_CHANGED = function(isDefault, new, old)
     print('isDefault = ' .. tostring(isDefault))
@@ -85,6 +87,19 @@ local handlers = {
   UI_ERROR_MESSAGE = function(_, s)
     print('ERROR: ' .. s)
   end,
+  UPDATE_BINDINGS = (function()
+    local process = function(command, category, ...)
+      state.bindings[command] = category
+      for i = 1, select('#', ...) do
+        state.bindkeys[select(i, ...)] = command
+      end
+    end
+    return function()
+      for i = 1, GetNumBindings() do
+        process(GetBinding(i))
+      end
+    end
+  end)(),
   UPDATE_CHAT_COLOR = function(name, r, g, b)
     Mixin(ensuret(state.chatchannels, name), { r = r, g = g, b = b })
   end,
