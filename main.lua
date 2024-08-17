@@ -44,6 +44,9 @@ local handlers = {
       state.loaded = true
     end
   end,
+  ARENA_TEAM_ROSTER_UPDATE = function()
+    -- Fires three times as part of the login process; that's it.
+  end,
   CONSOLE_MESSAGE = function(s)
     print('[console] ' .. s)
   end,
