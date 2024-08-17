@@ -87,6 +87,9 @@ local handlers = {
     state.turning = false
     print('turning: true -> false')
   end,
+  SPELL_ACTIVATION_OVERLAY_HIDE = function()
+    -- Unclear why it fires, but nothing listens to it in classic.
+  end,
   UI_ERROR_MESSAGE = function(_, s)
     print('ERROR: ' .. s)
   end,
