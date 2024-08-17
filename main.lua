@@ -75,20 +75,30 @@ local handlers = {
     -- with these events, e.g. Alt-Tabbing out of the game releases the
     -- modifier per IsAltKeyDown but a corresponding event does not fire.
   end,
+  PLAYER_STARTED_LOOKING = function()
+    assert(not state.looking)
+    state.looking = true
+    print('looking: false -> true')
+  end,
   PLAYER_STARTED_MOVING = function()
     assert(not state.moving)
     state.moving = true
     print('moving: false -> true')
   end,
-  PLAYER_STOPPED_MOVING = function()
-    assert(state.moving)
-    state.moving = false
-    print('moving: true -> false')
-  end,
   PLAYER_STARTED_TURNING = function()
     assert(not state.turning)
     state.turning = true
     print('turning: false -> true')
+  end,
+  PLAYER_STOPPED_LOOKING = function()
+    assert(state.looking)
+    state.looking = false
+    print('looking: true -> false')
+  end,
+  PLAYER_STOPPED_MOVING = function()
+    assert(state.moving)
+    state.moving = false
+    print('moving: true -> false')
   end,
   PLAYER_STOPPED_TURNING = function()
     assert(state.turning)
