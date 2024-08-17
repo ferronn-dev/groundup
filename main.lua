@@ -1,6 +1,7 @@
 local thisAddonName = ...
 
 local state = {
+  cursor = 0,
   loaded = false,
   moving = false,
   turning = false,
@@ -11,12 +12,19 @@ local print = (function()
   m:SetAllPoints()
   m:SetFontObject(GameFontNormalLeft)
   m:SetTimeVisible(3.402823e38)
+  local tick = 0
+  m:SetScript('OnUpdate', function()
+    tick = tick + 1
+  end)
   return function(s)
-    m:AddMessage(s)
+    m:AddMessage('[' .. tick .. '] ' .. tostring(s))
   end
 end)()
 
 local handlers = {
+  ADDON_ACTION_BLOCKED = function()
+    print('addon action blocked!')
+  end,
   ADDON_LOADED = function(addonName, containsBindings)
     if addnoName == thisAddonName then
       assert(containsBindings == false)
@@ -26,6 +34,23 @@ local handlers = {
   end,
   CONSOLE_MESSAGE = function(s)
     print('console: ' .. s)
+  end,
+  CURSOR_CHANGED = function(isDefault, new, old)
+    print('isDefault = ' .. tostring(isDefault))
+    print('new = ' .. new)
+    print('old = ' .. old)
+    assert(isDefault == (new == 0))
+    if new == old then
+      -- The event fires for things that change the default cursor
+      -- in the 3D world, but doesn't expose what's being moused over
+      -- (e.g. vendor, repair, attack).
+      assert(isDefault)
+    else
+      assert(new ~= old)
+      assert(state.cursor == old)
+      state.cursor = new
+      print('cursor: ' .. old .. ' -> ' .. new)
+    end
   end,
   PLAYER_STARTED_MOVING = function()
     assert(not state.moving)
@@ -52,19 +77,33 @@ local handlers = {
   end,
 }
 
-local reported = {}
 local f = CreateFrame('Frame')
 f:SetScript('OnEvent', function(_, ev, ...)
   local h = handlers[ev]
   if h then
     h(...)
-  elseif not reported[ev] then
+  else
     print('unsupported event ' .. ev)
-    reported[ev] = true
   end
 end)
 f:RegisterAllEvents()
 
-UIParent:Hide()
-
 SetOverrideBinding(WorldFrame, false, 'ALT-R', 'GROUNDUP_RELOADUI')
+SetOverrideBinding(WorldFrame, false, 'ALT-Z', 'GROUNDUP_TOGGLEUI')
+seterrorhandler(function(s)
+  print('lua error: ' .. s)
+end)
+
+local hidden = CreateFrame('Frame')
+hidden:Hide()
+UIParent:SetParent(hidden)
+
+GroundUp = {
+  Bindings = {
+    ReloadUI = ReloadUI,
+    ToggleUI = function()
+      UIParent:SetParent(not UIParent:GetParent() and hidden or nil)
+      UIParent:SetAllPoints()
+    end,
+  }
+}

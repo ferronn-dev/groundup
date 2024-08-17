@@ -1,5 +1,8 @@
 <Bindings>
-  <Binding name="GROUNDUP_RELOADUI">
-    ReloadUI()
+  <Binding name='GROUNDUP_RELOADUI'>
+    GroundUp.Bindings.ReloadUI()
+  </Binding>
+  <Binding name='GROUNDUP_TOGGLEUI'>
+    GroundUp.Bindings.ToggleUI()
   </Binding>
 </Bindings>
