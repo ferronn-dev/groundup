@@ -115,6 +115,9 @@ local handlers = {
   SPELL_ACTIVATION_OVERLAY_HIDE = function()
     -- Unclear why it fires, but nothing listens to it in classic.
   end,
+  SPELL_UPDATE_USABLE = function()
+    -- Doesn't seem to communicate any useful information.
+  end,
   UI_ERROR_MESSAGE = function(_, s)
     print('ERROR: ' .. s)
   end,
