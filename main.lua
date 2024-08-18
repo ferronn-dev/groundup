@@ -38,6 +38,8 @@ local print = (function()
   end
 end)()
 
+local function nop() end
+
 local handlers = {
   ADDON_ACTION_BLOCKED = function()
     print('addon action blocked!')
@@ -49,12 +51,8 @@ local handlers = {
       state.loaded = true
     end
   end,
-  ARENA_TEAM_ROSTER_UPDATE = function()
-    -- Fires three times as part of the login process; that's it.
-  end,
-  BN_FRIEND_INFO_CHANGED = function()
-    -- Just ignoring battle.net stuff for now.
-  end,
+  ARENA_TEAM_ROSTER_UPDATE = nop,
+  BN_FRIEND_INFO_CHANGED = nop,
   CHAT_MSG_BN_INLINE_TOAST_ALERT = function(s)
     print('[chat][bn]: ' .. s)
   end,
@@ -87,6 +85,7 @@ local handlers = {
   CVAR_UPDATE = function(eventName, value)
     print('[cvar] ' .. eventName .. ': ' .. value)
   end,
+  FIRST_FRAME_RENDERED = nop,
   GLOBAL_MOUSE_DOWN = function(b)
     assert(state.mousedown[b] == nil)
     state.mousedown[b] = true
@@ -124,18 +123,12 @@ local handlers = {
     assert(state.turning)
     state.turning = false
   end,
-  SPELL_ACTIVATION_OVERLAY_HIDE = function()
-    -- Unclear why it fires, but nothing listens to it in classic.
-  end,
-  SPELL_UPDATE_USABLE = function()
-    -- Doesn't seem to communicate any useful information.
-  end,
+  SPELL_ACTIVATION_OVERLAY_HIDE = nop,
+  SPELL_UPDATE_USABLE = nop,
   UI_ERROR_MESSAGE = function(_, s)
     print('ERROR: ' .. s)
   end,
-  UI_SCALE_CHANGED = function()
-    -- Do nothing.
-  end,
+  UI_SCALE_CHANGED = nop,
   UPDATE_BINDINGS = (function()
     local process = function(command, category, ...)
       state.bindings[command] = category
@@ -160,9 +153,7 @@ local handlers = {
   UPDATE_FACTION = function()
     print('GetNumFactions() = ' .. GetNumFactions())
   end,
-  UPDATE_FLOATING_CHAT_WINDOWS = function()
-    -- Ignoring chat window configuration for now.
-  end,
+  UPDATE_FLOATING_CHAT_WINDOWS = nop,
   UPDATE_MOUSEOVER_UNIT = function()
     local m = UnitGUID('mouseover')
     state.mouseoverunit = (state.mouseoverunit ~= m) and m or nil
