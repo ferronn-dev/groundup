@@ -118,6 +118,9 @@ local handlers = {
   UI_ERROR_MESSAGE = function(_, s)
     print('ERROR: ' .. s)
   end,
+  UI_SCALE_CHANGED = function()
+    -- Do nothing.
+  end,
   UPDATE_BINDINGS = (function()
     local process = function(command, category, ...)
       state.bindings[command] = category
