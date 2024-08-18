@@ -126,6 +126,8 @@ local handlers = {
       end
     end
     return function()
+      state.bindings = {}
+      state.bindkeys = {}
       for i = 1, GetNumBindings() do
         process(GetBinding(i))
       end
