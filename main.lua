@@ -68,9 +68,6 @@ local handlers = {
     assert(select('#', ...) == 0)
   end,
   CURSOR_CHANGED = function(isDefault, new, old)
-    print('isDefault = ' .. tostring(isDefault))
-    print('new = ' .. new)
-    print('old = ' .. old)
     assert(isDefault == (new == 0))
     if new == old then
       -- The event fires for things that change the default cursor
@@ -81,7 +78,6 @@ local handlers = {
       assert(new ~= old)
       assert(state.cursor == old)
       state.cursor = new
-      print('cursor: ' .. old .. ' -> ' .. new)
     end
   end,
   CVAR_UPDATE = function(eventName, value)
@@ -95,32 +91,26 @@ local handlers = {
   PLAYER_STARTED_LOOKING = function()
     assert(not state.looking)
     state.looking = true
-    print('looking: false -> true')
   end,
   PLAYER_STARTED_MOVING = function()
     assert(not state.moving)
     state.moving = true
-    print('moving: false -> true')
   end,
   PLAYER_STARTED_TURNING = function()
     assert(not state.turning)
     state.turning = true
-    print('turning: false -> true')
   end,
   PLAYER_STOPPED_LOOKING = function()
     assert(state.looking)
     state.looking = false
-    print('looking: true -> false')
   end,
   PLAYER_STOPPED_MOVING = function()
     assert(state.moving)
     state.moving = false
-    print('moving: true -> false')
   end,
   PLAYER_STOPPED_TURNING = function()
     assert(state.turning)
     state.turning = false
-    print('turning: true -> false')
   end,
   SPELL_ACTIVATION_OVERLAY_HIDE = function()
     -- Unclear why it fires, but nothing listens to it in classic.
@@ -150,7 +140,6 @@ local handlers = {
   UPDATE_MOUSEOVER_UNIT = function()
     local m = UnitGUID('mouseover')
     state.mouseoverunit = (state.mouseoverunit ~= m) and m or nil
-    print('mouseoverunit is now ' .. tostring(state.mouseoverunit))
   end,
 }
 
