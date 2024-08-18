@@ -63,6 +63,10 @@ local handlers = {
   CONSOLE_MESSAGE = function(s)
     print('[console] ' .. s)
   end,
+  CORPSE_POSITION_UPDATE = function(...)
+    -- This seems to fire at random times, just eat it for now.
+    assert(select('#', ...) == 0)
+  end,
   CURSOR_CHANGED = function(isDefault, new, old)
     print('isDefault = ' .. tostring(isDefault))
     print('new = ' .. new)
