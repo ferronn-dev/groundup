@@ -55,6 +55,9 @@ local handlers = {
   BN_FRIEND_INFO_CHANGED = function()
     -- Just ignoring battle.net stuff for now.
   end,
+  CHAT_MSG_BN_INLINE_TOAST_ALERT = function(s)
+    print('[chat][bn]: ' .. s)
+  end,
   CHAT_MSG_CHANNEL = function(s, p, _, c)
     print(('[chat][%s][%s]: %s'):format(c, p, s))
   end,
