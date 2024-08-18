@@ -6,6 +6,7 @@ local state = {
   chatchannels = {},
   cursor = 0,
   loaded = false,
+  mousedown = {},
   moving = false,
   turning = false,
 }
@@ -82,6 +83,14 @@ local handlers = {
   end,
   CVAR_UPDATE = function(eventName, value)
     print('[cvar] ' .. eventName .. ': ' .. value)
+  end,
+  GLOBAL_MOUSE_DOWN = function(b)
+    assert(state.mousedown[b] == nil)
+    state.mousedown[b] = true
+  end,
+  GLOBAL_MOUSE_UP = function(b)
+    assert(state.mousedown[b] == true)
+    state.mousedown[b] = nil
   end,
   MODIFIER_STATE_CHANGED = function()
     -- This is not reliable since Is*KeyDown functions can get out of sync
