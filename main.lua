@@ -160,6 +160,9 @@ local handlers = {
   UPDATE_FACTION = function()
     print('GetNumFactions() = ' .. GetNumFactions())
   end,
+  UPDATE_FLOATING_CHAT_WINDOWS = function()
+    -- Ignoring chat window configuration for now.
+  end,
   UPDATE_MOUSEOVER_UNIT = function()
     local m = UnitGUID('mouseover')
     state.mouseoverunit = (state.mouseoverunit ~= m) and m or nil
