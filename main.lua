@@ -25,7 +25,7 @@ local print = (function()
   local t = m:CreateTexture()
   t:SetAllPoints()
   t:SetColorTexture(0, 0, 0, 0.9)
-  m:SetFont(('Interface\\AddOns\\%s\\Inconsolata.ttf'):format(thisAddonName), 12, '')
+  m:SetFont(('Interface\\AddOns\\%s\\Inconsolata.ttf'):format(thisAddonName), 10, '')
   m:SetJustifyH('LEFT')
   m:SetTimeVisible(3.402823e38)
   local tick = 0
