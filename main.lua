@@ -22,6 +22,9 @@ end
 local print = (function()
   local m = CreateFrame('MessageFrame')
   m:SetAllPoints()
+  local t = m:CreateTexture()
+  t:SetAllPoints()
+  t:SetColorTexture(0, 0, 0, 0.9)
   m:SetFontObject(GameFontNormalSmallLeft)
   m:SetTimeVisible(3.402823e38)
   local tick = 0
