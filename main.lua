@@ -47,6 +47,9 @@ local handlers = {
   ARENA_TEAM_ROSTER_UPDATE = function()
     -- Fires three times as part of the login process; that's it.
   end,
+  CHAT_MSG_SYSTEM = function(s)
+    print('[chat/system] ' .. s)
+  end,
   CONSOLE_MESSAGE = function(s)
     print('[console] ' .. s)
   end,
