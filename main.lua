@@ -157,6 +157,9 @@ local handlers = {
   UPDATE_CHAT_COLOR_NAME_BY_CLASS = function(name, colorNameByClass)
     Mixin(ensuret(state.chatchannels, name), { colorNameByClass = colorNameByClass })
   end,
+  UPDATE_FACTION = function()
+    print('GetNumFactions() = ' .. GetNumFactions())
+  end,
   UPDATE_MOUSEOVER_UNIT = function()
     local m = UnitGUID('mouseover')
     state.mouseoverunit = (state.mouseoverunit ~= m) and m or nil
