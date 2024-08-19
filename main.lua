@@ -228,7 +228,7 @@ GroundUp = {
 
 local function run(cmd)
   if cmd:sub(1, 1) == '.' then
-    loadstring(cmd:sub(2))()
+    loadstring(cmd:sub(2), '@')()
   elseif cmd:sub(1, 5) == 'echo ' then
     print('[echo] ' .. cmd:sub(6))
   else
