@@ -224,3 +224,12 @@ GroundUp = {
     end,
   },
 }
+
+local e = CreateFrame('EditBox')
+e:SetPoint('BOTTOMLEFT')
+e:SetWidth(lw / 2)
+e:SetHeight(20)
+e:SetFont(('Interface\\AddOns\\%s\\Inconsolata.ttf'):format(thisAddonName), 10, '')
+e:SetTextColor(0, 1, 0)
+e:SetText('this is where the edit box will be')
+e:Disable()
