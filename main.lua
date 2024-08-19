@@ -49,6 +49,7 @@ end)()
 local function nop() end
 
 local handlers = {
+  ACTIONBAR_UPDATE_STATE = nop,
   ADDON_ACTION_BLOCKED = function()
     print('addon action blocked!')
   end,
@@ -79,6 +80,10 @@ local handlers = {
   CORPSE_POSITION_UPDATE = function(...)
     -- This seems to fire at random times, just eat it for now.
     assert(select('#', ...) == 0)
+  end,
+  CURRENT_SPELL_CAST_CHANGED = function()
+    -- Accepts a cancelledCast argument.
+    -- Very noisy even when doing nothing, so eating for now.
   end,
   CURSOR_CHANGED = function(isDefault, new, old)
     assert(isDefault == (new == 0))
@@ -168,6 +173,9 @@ local handlers = {
   UPDATE_MOUSEOVER_UNIT = function()
     local m = UnitGUID('mouseover')
     state.mouseoverunit = (state.mouseoverunit ~= m) and m or nil
+  end,
+  UPDATE_SHAPESHIFT_FORM = function()
+    -- We'll probably want to resurrect this at some point, but for now it's just noise.
   end,
 }
 
