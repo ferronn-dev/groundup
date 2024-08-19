@@ -52,6 +52,9 @@ local handlers = {
   ADDON_ACTION_BLOCKED = function()
     print('addon action blocked!')
   end,
+  ADDON_ACTION_FORBIDDEN = function(taint, func)
+    print(('[ERROR] forbidden from calling %s (%s)'):format(func, taint))
+  end,
   ADDON_LOADED = function(addonName, containsBindings)
     if addnoName == thisAddonName then
       assert(containsBindings == false)
