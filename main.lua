@@ -64,6 +64,7 @@ local handlers = {
     end
   end,
   ARENA_TEAM_ROSTER_UPDATE = nop,
+  BN_FRIEND_ACCOUNT_OFFLINE = nop,
   BN_FRIEND_INFO_CHANGED = nop,
   CHAT_MSG_BN_INLINE_TOAST_ALERT = function(s)
     print('[chat][bn]: ' .. s)
@@ -177,6 +178,7 @@ local handlers = {
   UPDATE_SHAPESHIFT_FORM = function()
     -- We'll probably want to resurrect this at some point, but for now it's just noise.
   end,
+  UPDATE_WEB_TICKET = nop,
 }
 
 local f = CreateFrame('Frame')
