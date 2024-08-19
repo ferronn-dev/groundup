@@ -73,6 +73,9 @@ local handlers = {
   CHAT_MSG_CHANNEL = function(s, p, _, c)
     print(('[chat][%s][%s]: %s'):format(c, p, s))
   end,
+  CHAT_MSG_SAY = function(s)
+    print('[chat][say] ' .. s)
+  end,
   CHAT_MSG_SYSTEM = function(s)
     print('[chat][system] ' .. s)
   end,
