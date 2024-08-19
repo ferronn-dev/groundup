@@ -171,6 +171,17 @@ local handlers = {
     print('GetNumFactions() = ' .. GetNumFactions())
   end,
   UPDATE_FLOATING_CHAT_WINDOWS = nop,
+  UPDATE_INVENTORY_DURABILITY = function()
+    local c, m = 0, 0
+    for i = 0, 19 do
+      local cc, mm = GetInventoryItemDurability(i)
+      if cc then
+        c = c + cc
+        m = m + mm
+      end
+    end
+    print(('durability %d/%d (%d%%)'):format(c, m, m == 0 and 0 or c / m * 100))
+  end,
   UPDATE_MOUSEOVER_UNIT = function()
     local m = UnitGUID('mouseover')
     state.mouseoverunit = (state.mouseoverunit ~= m) and m or nil
