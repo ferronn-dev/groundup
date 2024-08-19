@@ -116,6 +116,7 @@ local handlers = {
     -- with these events, e.g. Alt-Tabbing out of the game releases the
     -- modifier per IsAltKeyDown but a corresponding event does not fire.
   end,
+  PLAYER_AVG_ITEM_LEVEL_UPDATE = nop,
   PLAYER_STARTED_LOOKING = function()
     assert(not state.looking)
     state.looking = true
