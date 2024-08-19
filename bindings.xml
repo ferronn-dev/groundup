@@ -1,5 +1,5 @@
 <Bindings>
-  <Binding name='GROUNDUP_TOGGLEUI'>
-    GroundUp.Bindings.ToggleUI()
+  <Binding name='GROUNDUP_FOCUS_COMMAND_LINE'>
+    GroundUp.Bindings.FocusCommandLine()
   </Binding>
 </Bindings>

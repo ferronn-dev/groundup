@@ -109,6 +109,12 @@ local handlers = {
   CVAR_UPDATE = function(eventName, value)
     print('[cvar] ' .. eventName .. ': ' .. value)
   end,
+  DISPLAY_SIZE_CHANGED = function()
+    UIParent:ClearAllPoints()
+    UIParent:SetParent(WorldFrame)
+    UIParent:SetAllPoints()
+    UIParent:SetScale(0.5)
+  end,
   FIRST_FRAME_RENDERED = nop,
   GLOBAL_MOUSE_DOWN = function(b)
     assert(state.mousedown[b] == nil)
@@ -211,23 +217,9 @@ f:SetScript('OnEvent', function(_, ev, ...)
 end)
 f:RegisterAllEvents()
 
-SetOverrideBinding(WorldFrame, false, 'ALT-Z', 'GROUNDUP_TOGGLEUI')
 seterrorhandler(function(s)
   print('lua error: ' .. s)
 end)
-
-local hidden = CreateFrame('Frame')
-hidden:Hide()
-UIParent:SetParent(hidden)
-
-GroundUp = {
-  Bindings = {
-    ToggleUI = function()
-      UIParent:SetParent(not UIParent:GetParent() and hidden or nil)
-      UIParent:SetAllPoints()
-    end,
-  },
-}
 
 local function run(cmd)
   if cmd:sub(1, 1) == '.' then
@@ -247,7 +239,6 @@ e:SetFont(('Interface\\AddOns\\%s\\Inconsolata.ttf'):format(thisAddonName), 10, 
 e:SetTextColor(0, 1, 0)
 e:SetText('')
 e:SetAutoFocus(false)
-e:SetFocus()
 e:SetScript('OnEnterPressed', function()
   run(e:GetText())
   e:SetText('')
@@ -255,3 +246,13 @@ end)
 e:SetScript('OnEscapePressed', function()
   e:ClearFocus()
 end)
+
+GroundUp = {
+  Bindings = {
+    FocusCommandLine = function()
+      e:SetFocus()
+    end,
+  },
+}
+
+SetOverrideBinding(WorldFrame, false, '.', 'GROUNDUP_FOCUS_COMMAND_LINE')
