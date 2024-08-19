@@ -20,12 +20,20 @@ local function ensuret(t, k)
   return v
 end
 
+local pw, ph = GetPhysicalScreenSize()
+local lh = 768
+local lw = pw / ph * lh
+
+WorldFrame:ClearAllPoints()
+WorldFrame:SetPoint('TOPLEFT')
+WorldFrame:SetHeight(lh / 2)
+WorldFrame:SetWidth(lw / 2)
+
 local print = (function()
   local m = CreateFrame('MessageFrame')
-  m:SetAllPoints()
-  local t = m:CreateTexture()
-  t:SetAllPoints()
-  t:SetColorTexture(0, 0, 0, 0.9)
+  m:SetPoint('TOPRIGHT')
+  m:SetPoint('BOTTOM')
+  m:SetWidth(lw / 2)
   m:SetFont(('Interface\\AddOns\\%s\\Inconsolata.ttf'):format(thisAddonName), 10, '')
   m:SetJustifyH('LEFT')
   m:SetTimeVisible(3.402823e38)
