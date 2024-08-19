@@ -76,6 +76,9 @@ local handlers = {
   CHAT_MSG_SYSTEM = function(s)
     print('[chat][system] ' .. s)
   end,
+  CHAT_MSG_TEXT_EMOTE = function(s)
+    print('[chat][emote] ' .. s)
+  end,
   CONSOLE_MESSAGE = function(s)
     print('[console] ' .. s)
   end,
@@ -224,8 +227,8 @@ GroundUp = {
 }
 
 local function run(cmd)
-  if cmd == 'reload' then
-    ReloadUI()
+  if cmd:sub(1, 1) == '.' then
+    loadstring(cmd:sub(2))()
   elseif cmd:sub(1, 5) == 'echo ' then
     print('[echo] ' .. cmd:sub(6))
   else
