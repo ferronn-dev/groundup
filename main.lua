@@ -205,7 +205,6 @@ f:SetScript('OnEvent', function(_, ev, ...)
 end)
 f:RegisterAllEvents()
 
-SetOverrideBinding(WorldFrame, false, 'ALT-R', 'GROUNDUP_RELOADUI')
 SetOverrideBinding(WorldFrame, false, 'ALT-Z', 'GROUNDUP_TOGGLEUI')
 seterrorhandler(function(s)
   print('lua error: ' .. s)
@@ -217,13 +216,22 @@ UIParent:SetParent(hidden)
 
 GroundUp = {
   Bindings = {
-    ReloadUI = ReloadUI,
     ToggleUI = function()
       UIParent:SetParent(not UIParent:GetParent() and hidden or nil)
       UIParent:SetAllPoints()
     end,
   },
 }
+
+local function run(cmd)
+  if cmd == 'reload' then
+    ReloadUI()
+  elseif cmd:sub(1, 5) == 'echo ' then
+    print('[echo] ' .. cmd:sub(6))
+  else
+    print('[error] bad command')
+  end
+end
 
 local e = CreateFrame('EditBox')
 e:SetPoint('BOTTOMLEFT')
@@ -235,7 +243,7 @@ e:SetText('')
 e:SetAutoFocus(false)
 e:SetFocus()
 e:SetScript('OnEnterPressed', function()
-  print(e:GetText())
+  run(e:GetText())
   e:SetText('')
 end)
 e:SetScript('OnEscapePressed', function()
