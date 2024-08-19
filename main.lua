@@ -65,6 +65,7 @@ local handlers = {
   end,
   ARENA_TEAM_ROSTER_UPDATE = nop,
   BN_FRIEND_ACCOUNT_OFFLINE = nop,
+  BN_FRIEND_ACCOUNT_ONLINE = nop,
   BN_FRIEND_INFO_CHANGED = nop,
   CHAT_MSG_BN_INLINE_TOAST_ALERT = function(s)
     print('[chat][bn]: ' .. s)
