@@ -34,7 +34,7 @@ local print = (function()
     tick = tick + 1
   end)
   return function(s)
-    m:AddMessage('[' .. tick .. '] ' .. tostring(s))
+    m:AddMessage('[' .. tick .. '] ' .. tostring(s), 0, 1, 0)
   end
 end)()
 
