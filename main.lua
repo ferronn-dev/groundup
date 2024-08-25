@@ -144,6 +144,7 @@ local handlers = {
     print('camping!')
   end,
   PLAYER_INTERACTION_MANAGER_FRAME_HIDE = nop,
+  PLAYER_INTERACTION_MANAGER_FRAME_SHOW = nop,
   PLAYER_QUITING = function()
     assert(not state.camping)
     assert(not state.quitting)
