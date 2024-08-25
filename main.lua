@@ -191,7 +191,7 @@ local handlers = {
           local i, n = 0, GetNumFactions()
           while i < n do
             i = i + 1
-            local isHeader, isCollapsed = select(8, GetFactionInfo(i))
+            local isHeader, isCollapsed = select(9, GetFactionInfo(i))
             if isCollapsed then
               assert(isHeader)
               ExpandFactionHeader(i)
@@ -201,10 +201,14 @@ local handlers = {
         end
         table.wipe(state.factions)
         for i = 1, GetNumFactions() do
-          local name = GetFactionInfo(i)
-          table.insert(state.factions, name)
+          local name, _, _, _, _, barValue, _, _, isHeader, isCollapsed = GetFactionInfo(i)
+          if isHeader then
+            assert(not isCollapsed)
+          else
+            state.factions[name] = barValue
+          end
         end
-        print('factions: ' .. table.concat(state.factions, ', '))
+        print('faction update!')
         processing = false
       end
     end
@@ -252,7 +256,9 @@ local function run(cmd)
   elseif cmd:sub(1, 5) == 'echo ' then
     print('[echo] ' .. cmd:sub(6))
   elseif cmd == 'factions' then
-    print('factions: ' .. table.concat(state.factions, ', '))
+    for k, v in pairs(state.factions) do
+      print('[faction] ' .. k .. ': ' .. v)
+    end
   else
     print('[error] bad command')
   end
