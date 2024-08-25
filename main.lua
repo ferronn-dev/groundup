@@ -3,13 +3,16 @@ local thisAddonName = ...
 local state = {
   bindings = {},
   bindkeys = {},
+  camping = false,
   chatchannels = {},
   cursor = 0,
+  expectflags = false,
   factions = {},
   loaded = false,
   mousedown = {},
   moving = false,
   quest = false,
+  quitting = false,
   turning = false,
 }
 
@@ -132,7 +135,23 @@ local handlers = {
     -- modifier per IsAltKeyDown but a corresponding event does not fire.
   end,
   PLAYER_AVG_ITEM_LEVEL_UPDATE = nop,
+  PLAYER_CAMPING = function()
+    assert(not state.camping)
+    assert(not state.quitting)
+    assert(not state.expectflags)
+    state.camping = true
+    state.expectflags = true
+    print('camping!')
+  end,
   PLAYER_INTERACTION_MANAGER_FRAME_HIDE = nop,
+  PLAYER_QUITING = function()
+    assert(not state.camping)
+    assert(not state.quitting)
+    assert(not state.expectflags)
+    state.quitting = true
+    state.expectflags = true
+    print('quitting!')
+  end,
   PLAYER_SOFT_TARGET_INTERACTION = nop,
   PLAYER_STARTED_LOOKING = function()
     assert(not state.looking)
@@ -180,6 +199,24 @@ local handlers = {
     print(('[error][%d][%s] %s'):format(id, str, s))
   end,
   UI_SCALE_CHANGED = nop,
+  UNIT_FLAGS = function(unit)
+    if unit == 'player' and state.expectflags then
+      state.expectflags = false
+      return
+    end
+    assert(not state.expectflags)
+    if unit == 'player' and state.camping then
+      print('cancel camp')
+      state.camping = false
+      return
+    end
+    if unit == 'player' and state.quitting then
+      print('cancel quit')
+      state.quitting = false
+      return
+    end
+    print('unsupported UNIT_FLAGS with ' .. unit)
+  end,
   UPDATE_BINDINGS = (function()
     local process = function(command, category, ...)
       state.bindings[command] = category
@@ -269,6 +306,10 @@ seterrorhandler(function(s)
   print('lua error: ' .. s)
 end)
 
+local quitButton = CreateFrame('Button', 'GroundUpQuitButton', nil, 'SecureActionButtonTemplate')
+quitButton:SetAttribute('type', 'macro')
+quitButton:SetAttribute('macrotext', '/quit')
+
 local function run(cmd)
   if cmd:sub(1, 1) == '.' then
     loadstring(cmd:sub(2), '@')()
@@ -282,6 +323,10 @@ local function run(cmd)
     AcceptQuest()
   elseif cmd == 'quest decline' and state.quest then
     DeclineQuest()
+  elseif cmd == 'noquit' then
+    CancelLogout()
+  elseif cmd == 'reload' then
+    ReloadUI()
   else
     print('[error] bad command')
   end
@@ -312,6 +357,7 @@ GroundUp = {
 }
 
 local bindings = {
+  ['ALT-CTRL-Q'] = 'CLICK GroundUpQuitButton:LeftButton',
   ['SHIFT-T'] = 'INTERACTMOUSEOVER',
   ['T'] = 'INTERACTTARGET',
   ['.'] = 'GROUNDUP_FOCUS_COMMAND_LINE',
