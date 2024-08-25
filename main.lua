@@ -133,6 +133,7 @@ local handlers = {
   end,
   PLAYER_AVG_ITEM_LEVEL_UPDATE = nop,
   PLAYER_INTERACTION_MANAGER_FRAME_HIDE = nop,
+  PLAYER_SOFT_TARGET_INTERACTION = nop,
   PLAYER_STARTED_LOOKING = function()
     assert(not state.looking)
     state.looking = true
