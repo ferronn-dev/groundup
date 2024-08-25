@@ -161,6 +161,7 @@ local handlers = {
     assert(not state.quest)
     state.quest = true
     print('[quest] (' .. GetQuestID() .. ') ' .. GetTitleText() .. '\n' .. GetQuestText())
+    print('[quest][objective] ' .. GetObjectiveText())
   end,
   QUEST_FINISHED = function()
     -- Cannot assert since it can fire multiple times.
@@ -306,4 +307,11 @@ GroundUp = {
   },
 }
 
-SetOverrideBinding(WorldFrame, false, '.', 'GROUNDUP_FOCUS_COMMAND_LINE')
+local bindings = {
+  ['SHIFT-T'] = 'INTERACTMOUSEOVER',
+  ['T'] = 'INTERACTTARGET',
+  ['.'] = 'GROUNDUP_FOCUS_COMMAND_LINE',
+}
+for k, v in pairs(bindings) do
+  SetOverrideBinding(WorldFrame, false, k, v)
+end
