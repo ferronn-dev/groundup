@@ -129,6 +129,15 @@ local handlers = {
     assert(state.mousedown[b] == true)
     state.mousedown[b] = nil
   end,
+  GOSSIP_CLOSED = function()
+    print('[gossip][closed]')
+  end,
+  GOSSIP_SHOW = function()
+    print('[gossip] ' .. C_GossipInfo.GetText())
+    for i, o in ipairs(C_GossipInfo.GetOptions()) do
+      print(('[gossip][%d] %s'):format(o.gossipOptionID, o.name))
+    end
+  end,
   MODIFIER_STATE_CHANGED = function()
     -- This is not reliable since Is*KeyDown functions can get out of sync
     -- with these events, e.g. Alt-Tabbing out of the game releases the
