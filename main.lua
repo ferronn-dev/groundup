@@ -9,6 +9,7 @@ local state = {
   loaded = false,
   mousedown = {},
   moving = false,
+  quest = false,
   turning = false,
 }
 
@@ -155,6 +156,18 @@ local handlers = {
   PLAYER_STOPPED_TURNING = function()
     assert(state.turning)
     state.turning = false
+  end,
+  QUEST_DETAIL = function()
+    assert(not state.quest)
+    state.quest = true
+    print('[quest] (' .. GetQuestID() .. ') ' .. GetTitleText() .. '\n' .. GetQuestText())
+  end,
+  QUEST_FINISHED = function()
+    -- Cannot assert since it can fire multiple times.
+    if state.quest then
+      state.quest = false
+      print('[quest] finished')
+    end
   end,
   SPELL_ACTIVATION_OVERLAY_HIDE = nop,
   SPELL_UPDATE_USABLE = nop,
