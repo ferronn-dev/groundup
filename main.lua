@@ -5,6 +5,7 @@ local state = {
   bindkeys = {},
   chatchannels = {},
   cursor = 0,
+  factions = {},
   loaded = false,
   mousedown = {},
   moving = false,
@@ -181,9 +182,33 @@ local handlers = {
   UPDATE_CHAT_COLOR_NAME_BY_CLASS = function(name, colorNameByClass)
     Mixin(ensuret(state.chatchannels, name), { colorNameByClass = colorNameByClass })
   end,
-  UPDATE_FACTION = function()
-    print('GetNumFactions() = ' .. GetNumFactions())
-  end,
+  UPDATE_FACTION = (function()
+    local processing = false
+    return function()
+      if not processing then
+        processing = true
+        do
+          local i, n = 0, GetNumFactions()
+          while i < n do
+            i = i + 1
+            local isHeader, isCollapsed = select(8, GetFactionInfo(i))
+            if isCollapsed then
+              assert(isHeader)
+              ExpandFactionHeader(i)
+              n = GetNumFactions()
+            end
+          end
+        end
+        table.wipe(state.factions)
+        for i = 1, GetNumFactions() do
+          local name = GetFactionInfo(i)
+          table.insert(state.factions, name)
+        end
+        print('factions: ' .. table.concat(state.factions, ', '))
+        processing = false
+      end
+    end
+  end)(),
   UPDATE_FLOATING_CHAT_WINDOWS = nop,
   UPDATE_INVENTORY_DURABILITY = function()
     local c, m = 0, 0
@@ -226,6 +251,8 @@ local function run(cmd)
     loadstring(cmd:sub(2), '@')()
   elseif cmd:sub(1, 5) == 'echo ' then
     print('[echo] ' .. cmd:sub(6))
+  elseif cmd == 'factions' then
+    print('factions: ' .. table.concat(state.factions, ', '))
   else
     print('[error] bad command')
   end
