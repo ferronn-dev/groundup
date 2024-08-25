@@ -173,8 +173,11 @@ local handlers = {
   end,
   SPELL_ACTIVATION_OVERLAY_HIDE = nop,
   SPELL_UPDATE_USABLE = nop,
-  UI_ERROR_MESSAGE = function(_, s)
-    print('ERROR: ' .. s)
+  UI_ERROR_MESSAGE = function(id, s)
+    local str = GetGameMessageInfo(id)
+    assert(_G[str] == s)
+    assert(_G['LE_GAME_' .. str] == id)
+    print(('[error][%d][%s] %s'):format(id, str, s))
   end,
   UI_SCALE_CHANGED = nop,
   UPDATE_BINDINGS = (function()
