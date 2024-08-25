@@ -273,6 +273,10 @@ local function run(cmd)
     for k, v in pairs(state.factions) do
       print('[faction] ' .. k .. ': ' .. v)
     end
+  elseif cmd == 'quest accept' and state.quest then
+    AcceptQuest()
+  elseif cmd == 'quest decline' and state.quest then
+    DeclineQuest()
   else
     print('[error] bad command')
   end
