@@ -1,5 +1,14 @@
 local thisAddonName = ...
 
+local f = EnumerateFrames()
+while f do
+  f:UnregisterAllEvents()
+  if f ~= WorldFrame then
+    f:Hide()
+  end
+  f = EnumerateFrames(f)
+end
+
 local state = {
   bindings = {},
   bindkeys = {},
@@ -114,12 +123,7 @@ local handlers = {
   CVAR_UPDATE = function(eventName, value)
     print('[cvar] ' .. eventName .. ': ' .. value)
   end,
-  DISPLAY_SIZE_CHANGED = function()
-    UIParent:ClearAllPoints()
-    UIParent:SetParent(WorldFrame)
-    UIParent:SetAllPoints()
-    UIParent:SetScale(0.5)
-  end,
+  DISPLAY_SIZE_CHANGED = nop,
   FIRST_FRAME_RENDERED = nop,
   GLOBAL_MOUSE_DOWN = function(b)
     assert(state.mousedown[b] == nil)
