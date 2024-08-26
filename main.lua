@@ -333,9 +333,15 @@ local quitButton = CreateFrame('Button', 'GroundUpQuitButton', nil, 'SecureActio
 quitButton:SetAttribute('type', 'macro')
 quitButton:SetAttribute('macrotext', '/quit')
 
+local lsmt = {
+  __index = function(t, k)
+    return k == 'print' and print or _G[k]
+  end,
+}
+
 local function run(cmd)
   if cmd:sub(1, 1) == '.' then
-    loadstring(cmd:sub(2), '@')()
+    setfenv(loadstring(cmd:sub(2), '@'), setmetatable({}, lsmt))()
   elseif cmd:sub(1, 5) == 'echo ' then
     print('[echo] ' .. cmd:sub(6))
   elseif cmd == 'factions' then
