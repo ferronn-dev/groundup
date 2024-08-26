@@ -22,6 +22,8 @@ local state = {
   moving = false,
   quest = false,
   quitting = false,
+  trainershow = false,
+  training = false,
   turning = false,
 }
 
@@ -219,6 +221,20 @@ local handlers = {
   end,
   SPELL_ACTIVATION_OVERLAY_HIDE = nop,
   SPELL_UPDATE_USABLE = nop,
+  TRAINER_CLOSED = function()
+    assert(state.training)
+    state.training = false
+    print('[trainer][closed]')
+  end,
+  TRAINER_SHOW = function()
+    if state.trainershow then
+      assert(not state.training)
+      state.training = true
+      print('[trainer] ' .. GetTrainerGreetingText())
+    end
+    -- It fires twice; ignore the first.
+    state.trainershow = not state.trainershow
+  end,
   UI_ERROR_MESSAGE = function(id, s)
     local str = GetGameMessageInfo(id)
     assert(_G[str] == s)
