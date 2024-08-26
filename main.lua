@@ -129,13 +129,26 @@ local handlers = {
     assert(state.mousedown[b] == true)
     state.mousedown[b] = nil
   end,
+  GOSSIP_CONFIRM_CANCEL = function()
+    print('[gossip][confirm cancel]')
+  end,
   GOSSIP_CLOSED = function()
     print('[gossip][closed]')
   end,
   GOSSIP_SHOW = function()
     print('[gossip] ' .. C_GossipInfo.GetText())
+    local t = {}
     for i, o in ipairs(C_GossipInfo.GetOptions()) do
-      print(('[gossip][%d] %s'):format(o.gossipOptionID, o.name))
+      print(('[gossip][%d][icon:%d] %s'):format(o.gossipOptionID, o.icon, o.name))
+      t[o.gossipOptionID] = o.icon
+    end
+    local auto = {
+      [132058] = 'training',
+    }
+    local k, v = next(t)
+    if not next(t, k) and auto[v] then
+      print('[gossip] auto-selecting ' .. auto[v])
+      C_GossipInfo.SelectOption(k)
     end
   end,
   MODIFIER_STATE_CHANGED = function()
