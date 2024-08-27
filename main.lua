@@ -265,6 +265,10 @@ local handlers = {
       print('[quest] finished')
     end
   end,
+  QUEST_PROGRESS = function()
+    print('[quest] (' .. GetQuestID() .. ') ' .. GetTitleText() .. '\n' .. GetProgressText())
+    CompleteQuest()
+  end,
   RAID_TARGET_UPDATE = function()
     local old = state.playerraidtarget
     local new = GetRaidTargetIndex('player')
