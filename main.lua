@@ -223,6 +223,14 @@ local handlers = {
       print('[quest] finished')
     end
   end,
+  RAID_TARGET_UPDATE = function()
+    local old = state.playerraidtarget
+    local new = GetRaidTargetIndex('player')
+    if old ~= new then
+      print('player raid target was ' .. tostring(old) .. ', now ' .. tostring(new))
+    end
+    state.playerraidtarget = new
+  end,
   SPELL_ACTIVATION_OVERLAY_HIDE = nop,
   SPELL_UPDATE_USABLE = nop,
   TRAINER_CLOSED = function()
