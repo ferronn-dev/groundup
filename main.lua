@@ -364,6 +364,19 @@ local handlers = {
     -- We'll probably want to resurrect this at some point, but for now it's just noise.
   end,
   UPDATE_WEB_TICKET = nop,
+  VARIABLES_LOADED = function()
+    local cvars = {
+      nameplateShowAll = 0,
+      nameplateShowEnemies = 0,
+      nameplateShowEnemyMinions = 0,
+      nameplateShowEnemyMinus = 0,
+      nameplateShowFriends = 0,
+      nameplateShowFriendlyMinions = 0,
+    }
+    for k, v in pairs(cvars) do
+      SetCVar(k, tostring(v))
+    end
+  end,
 }
 
 local f = CreateFrame('Frame')
