@@ -240,6 +240,9 @@ local handlers = {
     assert(state.turning)
     state.turning = false
   end,
+  PLAYER_TARGET_CHANGED = function()
+    print('player target is now ' .. tostring(UnitName('target')))
+  end,
   QUEST_COMPLETE = function()
     print('[quest] (' .. GetQuestID() .. ') ' .. GetTitleText() .. '\n' .. GetRewardText())
     print(('[quest] money:%d xp:%d'):format(GetRewardMoney(), GetRewardXP()))
@@ -337,6 +340,13 @@ local handlers = {
       return
     end
     print('unsupported UNIT_FLAGS with ' .. unit)
+  end,
+  UNIT_TARGET = function(unit)
+    -- Eventually we'll do something interesting with this.
+    -- For now it's redundant with PLAYER_TARGET_CHANGED.
+    if unit ~= 'player' then
+      print('unsupported UNIT_TARGET with ' .. unit)
+    end
   end,
   UPDATE_ALL_UI_WIDGETS = nop,
   UPDATE_BINDINGS = (function()
