@@ -194,6 +194,7 @@ local handlers = {
     -- with these events, e.g. Alt-Tabbing out of the game releases the
     -- modifier per IsAltKeyDown but a corresponding event does not fire.
   end,
+  NEW_WMO_CHUNK = nop,
   PLAYER_AVG_ITEM_LEVEL_UPDATE = nop,
   PLAYER_CAMPING = function()
     assert(not state.camping)
