@@ -80,6 +80,7 @@ local handlers = {
       state.loaded = true
     end
   end,
+  AREA_POIS_UPDATED = nop,
   ARENA_TEAM_ROSTER_UPDATE = nop,
   BN_FRIEND_ACCOUNT_OFFLINE = nop,
   BN_FRIEND_ACCOUNT_ONLINE = nop,
@@ -337,6 +338,7 @@ local handlers = {
     end
     print('unsupported UNIT_FLAGS with ' .. unit)
   end,
+  UPDATE_ALL_UI_WIDGETS = nop,
   UPDATE_BINDINGS = (function()
     local process = function(command, category, ...)
       state.bindings[command] = category
