@@ -247,7 +247,9 @@ local handlers = {
             print('[trainer][%d] error: unexpected expanded=0')
           end
           if category == 'available' then
-            print(('[trainer][%d] %q %q %q %s'):format(i, name, rank or '<>', category, expanded))
+            local lvl = GetTrainerServiceLevelReq(i)
+            local cost = GetTrainerServiceCost(i)
+            print(('[trainer][%d][L%d][%dc] %s(%s)'):format(i, lvl, cost, name, rank or '<>'))
           end
         end
       end
