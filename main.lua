@@ -158,6 +158,12 @@ local handlers = {
       print(('[gossip][%d][icon:%d] %s'):format(o.gossipOptionID, o.icon, o.name))
       t[o.gossipOptionID] = o.icon
     end
+    for i, q in ipairs(C_GossipInfo.GetAvailableQuests()) do
+      print(('[gossip][!%d][id:%d] %s'):format(i, q.questID, q.title))
+    end
+    for i, q in ipairs(C_GossipInfo.GetActiveQuests()) do
+      print(('[gossip][?%d][id:%d] %s'):format(i, q.questID, q.title))
+    end
     local auto = {
       [132058] = 'training',
     }
