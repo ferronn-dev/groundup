@@ -256,6 +256,7 @@ local handlers = {
     state.quest = true
     print('[quest] (' .. GetQuestID() .. ') ' .. GetTitleText() .. '\n' .. GetQuestText())
     print('[quest][objective] ' .. GetObjectiveText())
+    AcceptQuest()
   end,
   QUEST_FINISHED = function()
     -- Cannot assert since it can fire multiple times.
@@ -452,10 +453,6 @@ local function run(cmd)
     for k, v in pairs(state.factions) do
       print('[faction] ' .. k .. ': ' .. v)
     end
-  elseif cmd == 'quest accept' and state.quest then
-    AcceptQuest()
-  elseif cmd == 'quest decline' and state.quest then
-    DeclineQuest()
   elseif cmd == 'noquit' then
     CancelLogout()
   elseif cmd == 'reload' then
