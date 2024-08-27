@@ -17,6 +17,7 @@ local state = {
   cursor = 0,
   expectflags = false,
   factions = {},
+  gossiping = false,
   loaded = false,
   mousedown = {},
   moving = false,
@@ -139,9 +140,13 @@ local handlers = {
     print('[gossip][confirm cancel]')
   end,
   GOSSIP_CLOSED = function()
+    assert(state.gossiping)
+    state.gossiping = false
     print('[gossip][closed]')
   end,
   GOSSIP_SHOW = function()
+    assert(not state.gossiping)
+    state.gossiping = true
     print('[gossip] ' .. C_GossipInfo.GetText())
     local t = {}
     for i, o in ipairs(C_GossipInfo.GetOptions()) do
