@@ -23,7 +23,6 @@ local state = {
   moving = false,
   quest = false,
   quitting = false,
-  trainershow = false,
   training = false,
   turning = false,
 }
@@ -231,15 +230,26 @@ local handlers = {
     state.training = false
     print('[trainer][closed]')
   end,
-  TRAINER_SHOW = function()
-    if state.trainershow then
-      assert(not state.training)
-      state.training = true
-      print('[trainer] ' .. GetTrainerGreetingText())
+  TRAINER_SHOW = (function()
+    -- Trainers should show us everything they can handle.
+    SetTrainerServiceTypeFilter('available', 1)
+    SetTrainerServiceTypeFilter('unavailable', 1)
+    SetTrainerServiceTypeFilter('used', 1)
+    local trainershow = false
+    return function()
+      if trainershow then
+        assert(not state.training)
+        state.training = true
+        print('[trainer] ' .. GetTrainerGreetingText())
+        for i = 1, GetNumTrainerServices() do
+          local name, rank, category, expanded = GetTrainerServiceInfo(i)
+          print(('[trainer][%d] %q %q %q %s'):format(i, name, rank or '<>', category, expanded))
+        end
+      end
+      -- It fires twice; ignore the first.
+      trainershow = not trainershow
     end
-    -- It fires twice; ignore the first.
-    state.trainershow = not state.trainershow
-  end,
+  end)(),
   UI_ERROR_MESSAGE = function(id, s)
     local str = GetGameMessageInfo(id)
     assert(_G[str] == s)
