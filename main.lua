@@ -243,7 +243,12 @@ local handlers = {
         print('[trainer] ' .. GetTrainerGreetingText())
         for i = 1, GetNumTrainerServices() do
           local name, rank, category, expanded = GetTrainerServiceInfo(i)
-          print(('[trainer][%d] %q %q %q %s'):format(i, name, rank or '<>', category, expanded))
+          if expanded ~= 1 then
+            print('[trainer][%d] error: unexpected expanded=0')
+          end
+          if category == 'available' then
+            print(('[trainer][%d] %q %q %q %s'):format(i, name, rank or '<>', category, expanded))
+          end
         end
       end
       -- It fires twice; ignore the first.
@@ -391,6 +396,8 @@ local function run(cmd)
     CancelLogout()
   elseif cmd == 'reload' then
     ReloadUI()
+  elseif cmd:sub(1, 6) == 'train ' then
+    BuyTrainerService(tonumber(cmd:sub(7)))
   else
     print('[error] bad command')
   end
