@@ -98,6 +98,8 @@ local handlers = {
   CHAT_MSG_TEXT_EMOTE = function(s)
     print('[chat][emote] ' .. s)
   end,
+  COMBAT_LOG_EVENT = nop, -- TODO process
+  COMBAT_LOG_EVENT_UNFILTERED = nop, -- TODO process
   CONSOLE_MESSAGE = function(s)
     print('[console] ' .. s)
   end,
