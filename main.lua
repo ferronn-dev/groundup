@@ -153,24 +153,28 @@ local handlers = {
     assert(not state.gossiping)
     state.gossiping = true
     print('[gossip] ' .. C_GossipInfo.GetText())
-    local t = {}
-    for i, o in ipairs(C_GossipInfo.GetOptions()) do
+    local options = C_GossipInfo.GetOptions()
+    for i, o in ipairs(options) do
       print(('[gossip][%d][icon:%d] %s'):format(o.gossipOptionID, o.icon, o.name))
-      t[o.gossipOptionID] = o.icon
     end
-    for i, q in ipairs(C_GossipInfo.GetAvailableQuests()) do
+    local availableQuests = C_GossipInfo.GetAvailableQuests()
+    for i, q in ipairs(availableQuests) do
       print(('[gossip][!%d][id:%d] %s'):format(i, q.questID, q.title))
     end
-    for i, q in ipairs(C_GossipInfo.GetActiveQuests()) do
+    local activeQuests = C_GossipInfo.GetActiveQuests()
+    for i, q in ipairs(activeQuests) do
       print(('[gossip][?%d][id:%d] %s'):format(i, q.questID, q.title))
     end
-    local auto = {
-      [132058] = 'training',
-    }
-    local k, v = next(t)
-    if not next(t, k) and auto[v] then
-      print('[gossip] auto-selecting ' .. auto[v])
-      C_GossipInfo.SelectOption(k)
+    local no, nav, nac = #options, #availableQuests, #activeQuests
+    if no == 1 and nav == 0 and nac == 0 then
+      print('[gossip] auto-selecting option')
+      C_GossipInfo.SelectOption(options[1].gossipOptionID)
+    elseif no == 0 and nav == 1 and nac == 0 then
+      print('[gossip] auto-selecting available quest')
+      C_GossipInfo.SelectAvailableQuest(availableQuests[1].questID)
+    elseif no == 0 and nav == 0 and nac == 1 then
+      print('[gossip] auto-selecting active quest')
+      C_GossipInfo.SelectActiveQuest(activeQuests[1].questID)
     end
   end,
   MERCHANT_CLOSED = function()
