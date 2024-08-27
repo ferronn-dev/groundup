@@ -65,6 +65,15 @@ end)()
 
 local function nop() end
 
+local function update(k, f)
+  local old = state[k]
+  local new = f()
+  if old ~= new then
+    print(('updating %s from %q to %q'):format(k, tostring(old), tostring(new)))
+    state[k] = new
+  end
+end
+
 local handlers = {
   ACTIONBAR_UPDATE_STATE = nop,
   ADDON_ACTION_BLOCKED = function()
@@ -81,6 +90,7 @@ local handlers = {
     end
   end,
   AREA_POIS_UPDATED = nop,
+  ARENA_OPPONENT_UPDATE = nop,
   ARENA_TEAM_ROSTER_UPDATE = nop,
   BN_FRIEND_ACCOUNT_OFFLINE = nop,
   BN_FRIEND_ACCOUNT_ONLINE = nop,
@@ -204,6 +214,10 @@ local handlers = {
     state.camping = true
     state.expectflags = true
     print('camping!')
+  end,
+  PLAYER_ENTERING_WORLD = function()
+    update('zone', GetZoneText)
+    update('subzone', GetSubZoneText)
   end,
   PLAYER_INTERACTION_MANAGER_FRAME_HIDE = nop,
   PLAYER_INTERACTION_MANAGER_FRAME_SHOW = nop,
@@ -433,6 +447,13 @@ local handlers = {
     for k, v in pairs(cvars) do
       SetCVar(k, tostring(v))
     end
+  end,
+  ZONE_CHANGED = function()
+    update('subzone', GetSubZoneText)
+  end,
+  ZONE_CHANGED_NEW_AREA = function()
+    update('zone', GetZoneText)
+    update('subzone', GetSubZoneText)
   end,
 }
 
