@@ -238,6 +238,19 @@ local handlers = {
     assert(state.turning)
     state.turning = false
   end,
+  QUEST_COMPLETE = function()
+    print('[quest] (' .. GetQuestID() .. ') ' .. GetTitleText() .. '\n' .. GetRewardText())
+    print(('[quest] money:%d xp:%d'):format(GetRewardMoney(), GetRewardXP()))
+    for i = 1, GetNumQuestRewards() do
+      local name, _, num = GetQuestItemInfo('reward', i)
+      print(('[quest][reward][%d] %s (%d)'):format(i, name, num))
+    end
+    for i = 1, GetNumQuestChoices() do
+      local name, _, num = GetQuestItemInfo('choice', i)
+      print(('[quest][choice][%d] %s (%d)'):format(i, name, num))
+    end
+    GetQuestReward(0)
+  end,
   QUEST_DETAIL = function()
     assert(not state.quest)
     state.quest = true
