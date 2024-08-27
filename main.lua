@@ -17,6 +17,7 @@ local state = {
   cursor = 0,
   expectflags = false,
   factions = {},
+  merching = false,
   gossiping = false,
   loaded = false,
   mousedown = {},
@@ -161,6 +162,18 @@ local handlers = {
     if not next(t, k) and auto[v] then
       print('[gossip] auto-selecting ' .. auto[v])
       C_GossipInfo.SelectOption(k)
+    end
+  end,
+  MERCHANT_CLOSED = function()
+    assert(state.merching)
+    state.merching = false
+    print('[merchant][closed]')
+  end,
+  MERCHANT_SHOW = function()
+    assert(not state.merching)
+    state.merching = true
+    for i = 1, GetMerchantNumItems() do
+      print('[merchant] ' .. tostring(GetMerchantItemInfo(i)))
     end
   end,
   MODIFIER_STATE_CHANGED = function()
