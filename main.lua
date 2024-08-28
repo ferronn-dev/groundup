@@ -480,9 +480,11 @@ seterrorhandler(function(s)
   print('lua error: ' .. s)
 end)
 
-local quitButton = CreateFrame('Button', 'GroundUpQuitButton', nil, 'SecureActionButtonTemplate')
-quitButton:SetAttribute('type', 'macro')
-quitButton:SetAttribute('macrotext', '/quit')
+local secureButton = CreateFrame('Button', 'GroundUpSecureButton', nil, 'SecureActionButtonTemplate')
+secureButton:SetAttribute('type-quit', 'macro')
+secureButton:SetAttribute('macrotext-quit', '/quit')
+secureButton:SetAttribute('type-logout', 'macro')
+secureButton:SetAttribute('macrotext-logout', '/logout')
 
 local lsmt = {
   __index = function(t, k)
@@ -549,7 +551,8 @@ GroundUp = {
 }
 
 local bindings = {
-  ['ALT-CTRL-Q'] = 'CLICK GroundUpQuitButton:LeftButton',
+  ['ALT-CTRL-Q'] = 'CLICK GroundUpSecureButton:quit',
+  ['ALT-CTRL-W'] = 'CLICK GroundUpSecureButton:logout',
   ['SHIFT-T'] = 'INTERACTMOUSEOVER',
   ['T'] = 'INTERACTTARGET',
   ['.'] = 'GROUNDUP_FOCUS_COMMAND_LINE',
