@@ -501,6 +501,7 @@ local function run(cmd)
     end
   elseif cmd == 'noquit' then
     CancelLogout()
+    DoEmote('stand')
   elseif cmd == 'reload' then
     ReloadUI()
   elseif cmd:sub(1, 6) == 'train ' then
