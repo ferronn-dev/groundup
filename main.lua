@@ -451,6 +451,9 @@ local handlers = {
   ZONE_CHANGED = function()
     update('subzone', GetSubZoneText)
   end,
+  ZONE_CHANGED_INDOORS = function()
+    update('subzone', GetSubZoneText)
+  end,
   ZONE_CHANGED_NEW_AREA = function()
     update('zone', GetZoneText)
     update('subzone', GetSubZoneText)
@@ -497,6 +500,19 @@ local function run(cmd)
     ReloadUI()
   elseif cmd:sub(1, 6) == 'train ' then
     BuyTrainerService(tonumber(cmd:sub(7)))
+  elseif cmd == 'close' then
+    if state.merching then
+      CloseMerchant()
+      assert(not state.merching)
+    elseif state.training then
+      CloseTrainer()
+      assert(not state.training)
+    elseif state.gossiping then
+      C_GossipInfo.CloseGossip()
+      assert(not state.gossiping)
+    else
+      print('[error] nothing to close')
+    end
   else
     print('[error] bad command')
   end
