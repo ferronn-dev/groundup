@@ -556,3 +556,10 @@ local bindings = {
 for k, v in pairs(bindings) do
   SetOverrideBinding(WorldFrame, false, k, v)
 end
+
+-- This is necessary to get C_Macro.SetMacroExecuteLineCallback called.
+-- Without this, secure buttons aren't possible.
+EventRegistry.frameEventFrame:RegisterEvent('PLAYER_ENTERING_WORLD')
+EventRegistry.frameEventFrame:HookScript('OnEvent', function()
+  EventRegistry.frameEventFrame:UnregisterAllEvents()
+end)
