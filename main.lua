@@ -563,7 +563,7 @@ for k, v in pairs(bindings) do
 end
 
 -- This is necessary to get C_Macro.SetMacroExecuteLineCallback called.
--- Without this, secure buttons aren't possible.
+-- Otherwise, macro execution is completely disabled.
 EventRegistry.frameEventFrame:RegisterEvent('PLAYER_ENTERING_WORLD')
 EventRegistry.frameEventFrame:HookScript('OnEvent', function()
   EventRegistry.frameEventFrame:UnregisterAllEvents()
