@@ -193,6 +193,9 @@ local handlers = {
       C_GossipInfo.SelectActiveQuest(activeQuests[1].questID)
     end
   end,
+  LUA_WARNING = function(ty, msg)
+    print(('[warning][%d] %s'):format(ty, msg))
+  end,
   MERCHANT_CLOSED = function()
     assert(state.merching)
     state.merching = false
@@ -550,6 +553,7 @@ end)
 local bindings = {
   ['ALT-CTRL-Q'] = 'CLICK GroundUpSecureButton:quit',
   ['ALT-CTRL-W'] = 'CLICK GroundUpSecureButton:logout',
+  ['ESCAPE'] = ' ',
   ['SHIFT-T'] = 'INTERACTMOUSEOVER',
   ['T'] = 'INTERACTTARGET',
   ['.'] = 'CLICK GroundUpSecureButton:focus',
