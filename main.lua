@@ -480,12 +480,6 @@ seterrorhandler(function(s)
   print('lua error: ' .. s)
 end)
 
-local secureButton = CreateFrame('Button', 'GroundUpSecureButton', nil, 'SecureActionButtonTemplate')
-secureButton:SetAttribute('type-quit', 'macro')
-secureButton:SetAttribute('macrotext-quit', '/quit')
-secureButton:SetAttribute('type-logout', 'macro')
-secureButton:SetAttribute('macrotext-logout', '/logout')
-
 local lsmt = {
   __index = function(t, k)
     return k == 'print' and print or _G[k]
@@ -542,20 +536,23 @@ e:SetScript('OnEscapePressed', function()
   e:ClearFocus()
 end)
 
-GroundUp = {
-  Bindings = {
-    FocusCommandLine = function()
-      e:SetFocus()
-    end,
-  },
-}
+local secureButton = CreateFrame('Button', 'GroundUpSecureButton', nil, 'SecureActionButtonTemplate')
+secureButton:SetAttribute('type-quit', 'macro')
+secureButton:SetAttribute('macrotext-quit', '/quit')
+secureButton:SetAttribute('type-logout', 'macro')
+secureButton:SetAttribute('macrotext-logout', '/logout')
+secureButton:HookScript('OnClick', function(_, b)
+  if b == 'focus' then
+    e:SetFocus()
+  end
+end)
 
 local bindings = {
   ['ALT-CTRL-Q'] = 'CLICK GroundUpSecureButton:quit',
   ['ALT-CTRL-W'] = 'CLICK GroundUpSecureButton:logout',
   ['SHIFT-T'] = 'INTERACTMOUSEOVER',
   ['T'] = 'INTERACTTARGET',
-  ['.'] = 'GROUNDUP_FOCUS_COMMAND_LINE',
+  ['.'] = 'CLICK GroundUpSecureButton:focus',
 }
 for k, v in pairs(bindings) do
   SetOverrideBinding(WorldFrame, false, k, v)
