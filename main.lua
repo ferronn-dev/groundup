@@ -293,7 +293,7 @@ local handlers = {
     state.turning = false
   end,
   PLAYER_TARGET_CHANGED = function()
-    print('player target is now ' .. tostring(UnitName('target')))
+    update('targetname', UnitName('target'))
   end,
   QUEST_COMPLETE = function()
     print('[quest] (' .. GetQuestID() .. ') ' .. GetTitleText() .. '\n' .. GetRewardText())
