@@ -4,8 +4,14 @@ local bindings = {
   ['ALT-CTRL-Q'] = 'CLICK GroundUpSecureButton:quit',
   ['ALT-CTRL-W'] = 'CLICK GroundUpSecureButton:logout',
   ['SHIFT-T'] = 'INTERACTMOUSEOVER',
+  ['`'] = 'TOGGLEAUTORUN',
+  ['Q'] = 'STRAFELEFT',
+  ['W'] = 'MOVEFORWARD',
+  ['E'] = 'STRAFERIGHT',
   ['T'] = 'INTERACTTARGET',
+  ['S'] = 'MOVEBACKWARD',
   ['.'] = 'CLICK GroundUpSecureButton:focus',
+  ['SPACE'] = 'JUMP',
 }
 
 do
