@@ -10,6 +10,13 @@ repos:
   rev: v0.20.0
   hooks:
   - id: stylua-github
+- repo: local
+  hooks:
+  - id: luacheck
+    name: luacheck
+    entry: luacheck
+    language: system
+    types: [lua]
 - repo: meta
   hooks:
   - id: check-hooks-apply

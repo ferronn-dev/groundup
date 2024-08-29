@@ -1,12 +1,14 @@
 local thisAddonName = ...
 
-local f = EnumerateFrames()
-while f do
-  f:UnregisterAllEvents()
-  if f ~= WorldFrame then
-    f:Hide()
+do
+  local f = EnumerateFrames()
+  while f do
+    f:UnregisterAllEvents()
+    if f ~= WorldFrame then
+      f:Hide()
+    end
+    f = EnumerateFrames(f)
   end
-  f = EnumerateFrames(f)
 end
 
 local state = {
@@ -83,7 +85,7 @@ local handlers = {
     print(('[ERROR] forbidden from calling %s (%s)'):format(func, taint))
   end,
   ADDON_LOADED = function(addonName, containsBindings)
-    if addnoName == thisAddonName then
+    if addonName == thisAddonName then
       assert(containsBindings == false)
       assert(not state.loaded)
       state.loaded = true
@@ -165,7 +167,7 @@ local handlers = {
     state.gossiping = true
     print('[gossip] ' .. C_GossipInfo.GetText())
     local options = C_GossipInfo.GetOptions()
-    for i, o in ipairs(options) do
+    for _, o in ipairs(options) do
       print(('[gossip][%d][icon:%d] %s'):format(o.gossipOptionID, o.icon, o.name))
     end
     local availableQuests = C_GossipInfo.GetAvailableQuests()
@@ -484,7 +486,7 @@ seterrorhandler(function(s)
 end)
 
 local lsmt = {
-  __index = function(t, k)
+  __index = function(_, k)
     return k == 'print' and print or _G[k]
   end,
 }
