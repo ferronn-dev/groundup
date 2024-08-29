@@ -67,9 +67,8 @@ end)()
 
 local function nop() end
 
-local function update(k, f)
+local function update(k, new)
   local old = state[k]
-  local new = f()
   if old ~= new then
     print(('updating %s from %q to %q'):format(k, tostring(old), tostring(new)))
     state[k] = new
@@ -226,8 +225,8 @@ local handlers = {
     print('camping!')
   end,
   PLAYER_ENTERING_WORLD = function()
-    update('zone', GetZoneText)
-    update('subzone', GetSubZoneText)
+    update('zone', GetZoneText())
+    update('subzone', GetSubZoneText())
   end,
   PLAYER_INTERACTION_MANAGER_FRAME_HIDE = nop,
   PLAYER_INTERACTION_MANAGER_FRAME_SHOW = nop,
@@ -435,7 +434,7 @@ local handlers = {
         m = m + mm
       end
     end
-    print(('durability %d/%d (%d%%)'):format(c, m, m == 0 and 0 or c / m * 100))
+    update('durability', ('%d/%d (%d%%)'):format(c, m, m == 0 and 0 or c / m * 100))
   end,
   UPDATE_MOUSEOVER_UNIT = function()
     local m = UnitGUID('mouseover')
@@ -459,14 +458,14 @@ local handlers = {
     end
   end,
   ZONE_CHANGED = function()
-    update('subzone', GetSubZoneText)
+    update('subzone', GetSubZoneText())
   end,
   ZONE_CHANGED_INDOORS = function()
-    update('subzone', GetSubZoneText)
+    update('subzone', GetSubZoneText())
   end,
   ZONE_CHANGED_NEW_AREA = function()
-    update('zone', GetZoneText)
-    update('subzone', GetSubZoneText)
+    update('zone', GetZoneText())
+    update('subzone', GetSubZoneText())
   end,
 }
 
