@@ -1,5 +1,13 @@
 local thisAddonName = ...
 
+local bindings = {
+  ['ALT-CTRL-Q'] = 'CLICK GroundUpSecureButton:quit',
+  ['ALT-CTRL-W'] = 'CLICK GroundUpSecureButton:logout',
+  ['SHIFT-T'] = 'INTERACTMOUSEOVER',
+  ['T'] = 'INTERACTTARGET',
+  ['.'] = 'CLICK GroundUpSecureButton:focus',
+}
+
 do
   local f = EnumerateFrames()
   while f do
@@ -12,8 +20,6 @@ do
 end
 
 local state = {
-  bindings = {},
-  bindkeys = {},
   camping = false,
   chatchannels = {},
   cursor = 0,
@@ -22,6 +28,7 @@ local state = {
   merching = false,
   gossiping = false,
   loaded = false,
+  loggedin = false,
   mousedown = {},
   moving = false,
   quest = false,
@@ -227,9 +234,21 @@ local handlers = {
   PLAYER_ENTERING_WORLD = function()
     update('zone', GetZoneText())
     update('subzone', GetSubZoneText())
+    for i = 1, GetNumBindings() do
+      local t = { GetBinding(i) }
+      for j = 3, #t do
+        SetOverrideBinding(WorldFrame, false, t[j], ' ')
+      end
+    end
+    for k, v in pairs(bindings) do
+      SetOverrideBinding(WorldFrame, false, k, v)
+    end
   end,
   PLAYER_INTERACTION_MANAGER_FRAME_HIDE = nop,
   PLAYER_INTERACTION_MANAGER_FRAME_SHOW = nop,
+  PLAYER_LOGIN = function()
+    update('loggedin', true)
+  end,
   PLAYER_QUITING = function()
     assert(not state.camping)
     assert(not state.quitting)
@@ -372,21 +391,11 @@ local handlers = {
     end
   end,
   UPDATE_ALL_UI_WIDGETS = nop,
-  UPDATE_BINDINGS = (function()
-    local process = function(command, category, ...)
-      state.bindings[command] = category
-      for i = 1, select('#', ...) do
-        state.bindkeys[select(i, ...)] = command
-      end
+  UPDATE_BINDINGS = function()
+    if state.loggedin then
+      print('[error] unexpected UPDATE_BINDINGS')
     end
-    return function()
-      state.bindings = {}
-      state.bindkeys = {}
-      for i = 1, GetNumBindings() do
-        process(GetBinding(i))
-      end
-    end
-  end)(),
+  end,
   UPDATE_CHAT_COLOR = function(name, r, g, b)
     Mixin(ensuret(state.chatchannels, name), { r = r, g = g, b = b })
   end,
@@ -550,18 +559,6 @@ secureButton:HookScript('OnClick', function(_, b)
     e:SetFocus()
   end
 end)
-
-local bindings = {
-  ['ALT-CTRL-Q'] = 'CLICK GroundUpSecureButton:quit',
-  ['ALT-CTRL-W'] = 'CLICK GroundUpSecureButton:logout',
-  ['ESCAPE'] = ' ',
-  ['SHIFT-T'] = 'INTERACTMOUSEOVER',
-  ['T'] = 'INTERACTTARGET',
-  ['.'] = 'CLICK GroundUpSecureButton:focus',
-}
-for k, v in pairs(bindings) do
-  SetOverrideBinding(WorldFrame, false, k, v)
-end
 
 -- This is necessary to get C_Macro.SetMacroExecuteLineCallback called.
 -- Otherwise, macro execution is completely disabled.
