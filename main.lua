@@ -12,6 +12,10 @@ local bindings = {
   ['S'] = 'MOVEBACKWARD',
   ['.'] = 'CLICK GroundUpSecureButton:focus',
   ['SPACE'] = 'JUMP',
+  ['UP'] = 'MOVEFORWARD',
+  ['LEFT'] = 'TURNLEFT',
+  ['DOWN'] = 'MOVEBACKWARD',
+  ['RIGHT'] = 'TURNRIGHT',
 }
 
 do
