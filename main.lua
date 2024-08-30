@@ -58,20 +58,15 @@ local function ensuret(t, k)
   return v
 end
 
-local pw, ph = GetPhysicalScreenSize()
-local lh = 768
-local lw = pw / ph * lh
-
 WorldFrame:ClearAllPoints()
 WorldFrame:SetPoint('TOPLEFT')
-WorldFrame:SetHeight(lh / 2)
-WorldFrame:SetWidth(lw / 2)
+WorldFrame:SetPoint('BOTTOMRIGHT', nil, 'CENTER')
 
 local print = (function()
   local m = CreateFrame('MessageFrame')
   m:SetPoint('TOPRIGHT')
   m:SetPoint('BOTTOM')
-  m:SetWidth(lw / 2)
+  m:SetPoint('LEFT', nil, 'CENTER')
   m:SetFont(('Interface\\AddOns\\%s\\Inconsolata.ttf'):format(thisAddonName), 10, '')
   m:SetJustifyH('LEFT')
   m:SetTimeVisible(3.402823e38)
@@ -547,7 +542,7 @@ end
 
 local e = CreateFrame('EditBox')
 e:SetPoint('BOTTOMLEFT')
-e:SetWidth(lw / 2)
+e:SetPoint('RIGHT', nil, 'CENTER')
 e:SetHeight(20)
 e:SetFont(('Interface\\AddOns\\%s\\Inconsolata.ttf'):format(thisAddonName), 10, '')
 e:SetTextColor(0, 1, 0)
