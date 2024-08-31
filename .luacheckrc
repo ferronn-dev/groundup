@@ -69,6 +69,7 @@ read_globals = {
   GetTrainerServiceInfo = {},
   GetTrainerServiceLevelReq = {},
   GetZoneText = {},
+  HasNewMail = {},
   hooksecurefunc = {},
   Mixin = {},
   ReloadUI = {},

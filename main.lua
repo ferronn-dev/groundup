@@ -53,6 +53,7 @@ local state = {
   cursor = 0,
   expectflags = false,
   factions = {},
+  hasmail = false,
   merching = false,
   gossiping = false,
   loaded = false,
@@ -495,6 +496,9 @@ local handlers = {
   UPDATE_MOUSEOVER_UNIT = function()
     local m = UnitGUID('mouseover')
     state.mouseoverunit = (state.mouseoverunit ~= m) and m or nil
+  end,
+  UPDATE_PENDING_MAIL = function()
+    update('hasmail', HasNewMail())
   end,
   UPDATE_SHAPESHIFT_FORM = function()
     -- We'll probably want to resurrect this at some point, but for now it's just noise.
