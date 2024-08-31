@@ -3,6 +3,7 @@ local thisAddonName = ...
 local bindings = {
   ['ALT-CTRL-Q'] = 'CLICK GroundUpSecureButton:quit',
   ['ALT-CTRL-W'] = 'CLICK GroundUpSecureButton:logout',
+  ['CTRL-\\'] = 'CLICK StaticPopup1Button1:LeftButton',
   ['SHIFT-T'] = 'INTERACTMOUSEOVER',
   ['SHIFT-MOUSEWHEELDOWN'] = 'CAMERAZOOMOUT',
   ['SHIFT-MOUSEWHEELUP'] = 'CAMERAZOOMIN',
@@ -580,4 +581,11 @@ end)
 EventRegistry.frameEventFrame:RegisterEvent('PLAYER_ENTERING_WORLD')
 EventRegistry.frameEventFrame:HookScript('OnEvent', function()
   EventRegistry.frameEventFrame:UnregisterAllEvents()
+end)
+
+-- Hack for static popups.
+UIParent:RegisterEvent('PLAYER_QUITING')
+UIParent:RegisterEvent('PLAYER_CAMPING')
+hooksecurefunc(StaticPopup1Text, 'SetFormattedText', function(_, fmt, ...)
+  print('[popup] ' .. fmt:format(...))
 end)

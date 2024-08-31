@@ -66,15 +66,22 @@ read_globals = {
   GetTrainerServiceInfo = {},
   GetTrainerServiceLevelReq = {},
   GetZoneText = {},
+  hooksecurefunc = {},
   Mixin = {},
   ReloadUI = {},
   SetCVar = {},
   seterrorhandler = {},
   SetOverrideBinding = {},
   SetTrainerServiceTypeFilter = {},
+  StaticPopup1Text = {},
   table = {
     fields = {
       wipe = {},
+    },
+  },
+  UIParent = {
+    fields = {
+      RegisterEvent = {},
     },
   },
   UnitGUID = {},
