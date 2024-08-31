@@ -556,6 +556,8 @@ local function run(cmd)
     else
       print('[error] nothing to close')
     end
+  elseif cmd:sub(1, 21) == 'gossip select option ' then
+    C_GossipInfo.SelectOption(tonumber(cmd:sub(22)))
   elseif cmd == 'questlog list' then
     for i = 1, GetNumQuestLogEntries() do
       local title, level, _, isHeader, isCollapsed, isComplete, _, questID = GetQuestLogTitle(i)
