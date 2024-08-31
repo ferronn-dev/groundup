@@ -5,6 +5,7 @@ local bindings = {
   ['ALT-CTRL-W'] = 'CLICK GroundUpSecureButton:logout',
   ['CTRL-\\'] = 'CLICK StaticPopup1Button1:LeftButton',
   ['CTRL-0'] = 'CLICK GroundUpSecureButton:hearthstone',
+  ['ESCAPE'] = 'CLICK GroundUpSecureButton:cancel',
   ['SHIFT-T'] = 'INTERACTMOUSEOVER',
   ['SHIFT-MOUSEWHEELDOWN'] = 'CAMERAZOOMOUT',
   ['SHIFT-MOUSEWHEELUP'] = 'CAMERAZOOMIN',
@@ -593,19 +594,6 @@ local function run(cmd)
     ReloadUI()
   elseif cmd:sub(1, 6) == 'train ' then
     BuyTrainerService(tonumber(cmd:sub(7)))
-  elseif cmd == 'close' then
-    if state.merching then
-      CloseMerchant()
-      assert(not state.merching)
-    elseif state.training then
-      CloseTrainer()
-      assert(not state.training)
-    elseif state.gossiping then
-      C_GossipInfo.CloseGossip()
-      assert(not state.gossiping)
-    else
-      print('[error] nothing to close')
-    end
   elseif cmd:sub(1, 21) == 'gossip select option ' then
     C_GossipInfo.SelectOption(tonumber(cmd:sub(22)))
   elseif cmd == 'questlog list' then
@@ -643,6 +631,29 @@ e:SetScript('OnEscapePressed', function()
   e:ClearFocus()
 end)
 
+local insecurecmds = {
+  cancel = function()
+    if state.merching then
+      CloseMerchant()
+      assert(not state.merching)
+    elseif state.training then
+      CloseTrainer()
+      assert(not state.training)
+    elseif state.gossiping then
+      C_GossipInfo.CloseGossip()
+      assert(not state.gossiping)
+    elseif state.incombat then
+      StopAttack()
+      assert(state.incombat) -- PLAYER_LEAVE_COMBAT delivered later
+    else
+      print('[error] nothing to cancel')
+    end
+  end,
+  focus = function()
+    e:SetFocus()
+  end,
+}
+
 local secureButton = CreateFrame('Button', 'GroundUpSecureButton', nil, 'SecureActionButtonTemplate')
 for k, v in pairs(securecmds) do
   for ck, cv in pairs(v) do
@@ -650,9 +661,7 @@ for k, v in pairs(securecmds) do
   end
 end
 secureButton:HookScript('OnClick', function(_, b)
-  if b == 'focus' then
-    e:SetFocus()
-  end
+  insecurecmds[b]()
 end)
 
 -- This is necessary to get C_Macro.SetMacroExecuteLineCallback called.

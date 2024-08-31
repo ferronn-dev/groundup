@@ -80,6 +80,7 @@ read_globals = {
   SetOverrideBinding = {},
   SetTrainerServiceTypeFilter = {},
   StaticPopup1Text = {},
+  StopAttack = {},
   table = {
     fields = {
       wipe = {},
