@@ -4,6 +4,7 @@ local bindings = {
   ['ALT-CTRL-Q'] = 'CLICK GroundUpSecureButton:quit',
   ['ALT-CTRL-W'] = 'CLICK GroundUpSecureButton:logout',
   ['CTRL-\\'] = 'CLICK StaticPopup1Button1:LeftButton',
+  ['CTRL-0'] = 'CLICK GroundUpSecureButton:hearthstone',
   ['SHIFT-T'] = 'INTERACTMOUSEOVER',
   ['SHIFT-MOUSEWHEELDOWN'] = 'CAMERAZOOMOUT',
   ['SHIFT-MOUSEWHEELUP'] = 'CAMERAZOOMIN',
@@ -596,6 +597,8 @@ secureButton:SetAttribute('type-quit', 'macro')
 secureButton:SetAttribute('macrotext-quit', '/quit')
 secureButton:SetAttribute('type-logout', 'macro')
 secureButton:SetAttribute('macrotext-logout', '/logout')
+secureButton:SetAttribute('type-hearthstone', 'item')
+secureButton:SetAttribute('item-hearthstone', 'Hearthstone')
 secureButton:HookScript('OnClick', function(_, b)
   if b == 'focus' then
     e:SetFocus()
