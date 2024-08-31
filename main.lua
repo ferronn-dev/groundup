@@ -137,8 +137,8 @@ local handlers = {
   CHAT_MSG_CHANNEL = function(s, p, _, c)
     print(('[chat][%s][%s]: %s'):format(c, p, s))
   end,
-  CHAT_MSG_MONSTER_SAY = function(s)
-    print('[chat][monster] ' .. s)
+  CHAT_MSG_MONSTER_SAY = function(text, playerName)
+    print(('[chat][monster][%s] %s'):format(playerName, text))
   end,
   CHAT_MSG_SAY = function(s)
     print('[chat][say] ' .. s)
