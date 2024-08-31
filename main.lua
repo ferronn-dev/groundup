@@ -56,6 +56,7 @@ local state = {
   hasmail = false,
   merching = false,
   gossiping = false,
+  inworld = false,
   loaded = false,
   loggedin = false,
   mousedown = {},
@@ -256,6 +257,7 @@ local handlers = {
     print('camping!')
   end,
   PLAYER_ENTERING_WORLD = function()
+    update('inworld', true)
     update('zone', GetZoneText())
     update('subzone', GetSubZoneText())
     for i = 1, GetNumBindings() do
@@ -270,8 +272,14 @@ local handlers = {
   end,
   PLAYER_INTERACTION_MANAGER_FRAME_HIDE = nop,
   PLAYER_INTERACTION_MANAGER_FRAME_SHOW = nop,
+  PLAYER_LEAVING_WORLD = function()
+    update('inworld', false)
+  end,
   PLAYER_LOGIN = function()
     update('loggedin', true)
+  end,
+  PLAYER_LOGOUT = function()
+    update('loggedin', false)
   end,
   PLAYER_QUITING = function()
     assert(not state.camping)
