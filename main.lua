@@ -56,6 +56,7 @@ local state = {
   hasmail = false,
   merching = false,
   gossiping = false,
+  incombat = false,
   inworld = false,
   loaded = false,
   loggedin = false,
@@ -63,6 +64,7 @@ local state = {
   moving = false,
   quest = false,
   quitting = false,
+  regen = true,
   training = false,
   turning = false,
 }
@@ -256,6 +258,9 @@ local handlers = {
     state.expectflags = true
     print('camping!')
   end,
+  PLAYER_ENTER_COMBAT = function()
+    update('incombat', true)
+  end,
   PLAYER_ENTERING_WORLD = function()
     update('inworld', true)
     update('zone', GetZoneText())
@@ -272,6 +277,9 @@ local handlers = {
   end,
   PLAYER_INTERACTION_MANAGER_FRAME_HIDE = nop,
   PLAYER_INTERACTION_MANAGER_FRAME_SHOW = nop,
+  PLAYER_LEAVE_COMBAT = function()
+    update('incombat', false)
+  end,
   PLAYER_LEAVING_WORLD = function()
     update('inworld', false)
   end,
@@ -288,6 +296,12 @@ local handlers = {
     state.quitting = true
     state.expectflags = true
     print('quitting!')
+  end,
+  PLAYER_REGEN_DISABLED = function()
+    update('regen', false)
+  end,
+  PLAYER_REGEN_ENABLED = function()
+    update('regen', true)
   end,
   PLAYER_SOFT_TARGET_INTERACTION = nop,
   PLAYER_STARTED_LOOKING = function()
