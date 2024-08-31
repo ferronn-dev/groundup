@@ -390,6 +390,14 @@ local handlers = {
     end
     print('unsupported UNIT_FLAGS with ' .. unit)
   end,
+  UNIT_HEALTH = nop,
+  UNIT_HEALTH_FREQUENT = function(unit)
+    update('unit:' .. unit .. ':health', UnitHealth(unit))
+  end,
+  UNIT_POWER = nop,
+  UNIT_POWER_FREQUENT = function(unit)
+    update('unit:' .. unit .. ':power', UnitPower(unit))
+  end,
   UNIT_TARGET = function(unit)
     -- Eventually we'll do something interesting with this.
     -- For now it's redundant with PLAYER_TARGET_CHANGED.

@@ -78,7 +78,9 @@ read_globals = {
     },
   },
   UnitGUID = {},
+  UnitHealth = {},
   UnitName = {},
+  UnitPower = {},
   WorldFrame = {
     fields = {
       ClearAllPoints = {},
