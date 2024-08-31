@@ -441,6 +441,11 @@ local handlers = {
     end
     print('unsupported UNIT_FLAGS with ' .. unit)
   end,
+  UNIT_HAPPINESS = function(unit)
+    if unit ~= 'player' then
+      print('unsupported UNIT_HAPPINESS with ' .. unit)
+    end
+  end,
   UNIT_HEALTH = nop,
   UNIT_HEALTH_FREQUENT = function(unit)
     update('unit:' .. unit .. ':health', UnitHealth(unit))
