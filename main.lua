@@ -230,6 +230,9 @@ local handlers = {
       C_GossipInfo.SelectActiveQuest(activeQuests[1].questID)
     end
   end,
+  LFG_LIST_AVAILABILITY_UPDATE = nop,
+  LFG_LOCK_INFO_RECEIVED = nop,
+  LFG_UPDATE_RANDOM_INFO = nop,
   LUA_WARNING = function(ty, msg)
     print(('[warning][%d] %s'):format(ty, msg))
   end,
@@ -251,6 +254,7 @@ local handlers = {
     -- modifier per IsAltKeyDown but a corresponding event does not fire.
   end,
   NEW_WMO_CHUNK = nop,
+  PET_JOURNAL_LIST_UPDATE = nop,
   PLAYER_AVG_ITEM_LEVEL_UPDATE = nop,
   PLAYER_CAMPING = function()
     assert(not state.camping)
@@ -382,6 +386,8 @@ local handlers = {
   end,
   SPELL_ACTIVATION_OVERLAY_HIDE = nop,
   SPELL_UPDATE_USABLE = nop,
+  STORE_PURCHASE_LIST_UPDATED = nop,
+  TOYS_UPDATED = nop,
   TRAINER_CLOSED = function()
     assert(state.training)
     state.training = false
