@@ -293,6 +293,9 @@ local handlers = {
   PLAYER_TARGET_CHANGED = function()
     update('targetname', UnitName('target'))
   end,
+  QUEST_ACCEPTED = function(entry, questID)
+    print(('[questlog] accepted questID %d (entry %d)'):format(questID, entry))
+  end,
   QUEST_COMPLETE = function()
     print('[quest] (' .. GetQuestID() .. ') ' .. GetTitleText() .. '\n' .. GetRewardText())
     print(('[quest] money:%d xp:%d'):format(GetRewardMoney(), GetRewardXP()))
@@ -323,6 +326,9 @@ local handlers = {
   QUEST_PROGRESS = function()
     print('[quest] (' .. GetQuestID() .. ') ' .. GetTitleText() .. '\n' .. GetProgressText())
     CompleteQuest()
+  end,
+  QUEST_REMOVED = function(questID)
+    print('[questlog] removed questID ' .. questID)
   end,
   RAID_TARGET_UPDATE = function()
     local old = state.playerraidtarget
@@ -544,6 +550,20 @@ local function run(cmd)
     else
       print('[error] nothing to close')
     end
+  elseif cmd == 'questlog list' then
+    for i = 1, GetNumQuestLogEntries() do
+      local title, level, _, isHeader, isCollapsed, isComplete, _, questID = GetQuestLogTitle(i)
+      assert(not isCollapsed)
+      if not isHeader then
+        print(('[questlog][%d][%d][L%d][%s] %s'):format(i, questID, level, isComplete and '*' or '.', title))
+      end
+    end
+  elseif cmd:sub(1, 17) == 'questlog abandon ' then
+    local k = tonumber(cmd:sub(18))
+    print('[questlog] abandoning entry ' .. k)
+    SelectQuestLogEntry(k)
+    SetAbandonQuest()
+    AbandonQuest()
   else
     print('[error] bad command')
   end
