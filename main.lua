@@ -337,6 +337,7 @@ local handlers = {
     assert(state.quest)
     state.quest = false
   end,
+  QUEST_LOG_UPDATE = nop,
   QUEST_PROGRESS = function()
     assert(not state.quest)
     state.quest = true
@@ -424,6 +425,10 @@ local handlers = {
   UNIT_POWER = nop,
   UNIT_POWER_FREQUENT = function(unit)
     update('unit:' .. unit .. ':power', UnitPower(unit))
+  end,
+  UNIT_QUEST_LOG_CHANGED = function(unit)
+    assert(unit == 'player')
+    print('[questlog] changed')
   end,
   UNIT_TARGET = function(unit)
     -- Eventually we'll do something interesting with this.
