@@ -312,6 +312,8 @@ local handlers = {
     print(('[questlog] accepted questID %d (entry %d)'):format(questID, entry))
   end,
   QUEST_COMPLETE = function()
+    assert(state.quest)
+    state.quest = false
     print('[quest] (' .. GetQuestID() .. ') ' .. GetTitleText() .. '\n' .. GetRewardText())
     print(('[quest] money:%d xp:%d'):format(GetRewardMoney(), GetRewardXP()))
     for i = 1, GetNumQuestRewards() do
@@ -332,13 +334,12 @@ local handlers = {
     AcceptQuest()
   end,
   QUEST_FINISHED = function()
-    -- Cannot assert since it can fire multiple times.
-    if state.quest then
-      state.quest = false
-      print('[quest] finished')
-    end
+    assert(state.quest)
+    state.quest = false
   end,
   QUEST_PROGRESS = function()
+    assert(not state.quest)
+    state.quest = true
     print('[quest] (' .. GetQuestID() .. ') ' .. GetTitleText() .. '\n' .. GetProgressText())
     CompleteQuest()
   end,
