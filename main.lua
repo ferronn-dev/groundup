@@ -374,13 +374,11 @@ local handlers = {
   end)(),
   UI_ERROR_MESSAGE = function(id, s)
     local str = GetGameMessageInfo(id)
-    assert(_G[str] == s)
     assert(_G['LE_GAME_' .. str] == id)
     print(('[error][%d][%s] %s'):format(id, str, s))
   end,
   UI_INFO_MESSAGE = function(id, s)
     local str = GetGameMessageInfo(id)
-    assert(_G[str] == s)
     assert(_G['LE_GAME_' .. str] == id)
     print(('[info][%d][%s] %s'):format(id, str, s))
   end,
