@@ -21,6 +21,20 @@ local bindings = {
   ['DOWN'] = 'MOVEBACKWARD',
   ['RIGHT'] = 'TURNRIGHT',
 }
+local securecmds = {
+  hearthstone = {
+    item = 'Hearthstone',
+    type = 'item',
+  },
+  logout = {
+    macrotext = '/logout',
+    type = 'macro',
+  },
+  quit = {
+    macrotext = '/quit',
+    type = 'macro',
+  },
+}
 
 do
   local f = EnumerateFrames()
@@ -593,12 +607,11 @@ e:SetScript('OnEscapePressed', function()
 end)
 
 local secureButton = CreateFrame('Button', 'GroundUpSecureButton', nil, 'SecureActionButtonTemplate')
-secureButton:SetAttribute('type-quit', 'macro')
-secureButton:SetAttribute('macrotext-quit', '/quit')
-secureButton:SetAttribute('type-logout', 'macro')
-secureButton:SetAttribute('macrotext-logout', '/logout')
-secureButton:SetAttribute('type-hearthstone', 'item')
-secureButton:SetAttribute('item-hearthstone', 'Hearthstone')
+for k, v in pairs(securecmds) do
+  for ck, cv in pairs(v) do
+    secureButton:SetAttribute(ck .. '-' .. k, cv)
+  end
+end
 secureButton:HookScript('OnClick', function(_, b)
   if b == 'focus' then
     e:SetFocus()
