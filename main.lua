@@ -131,9 +131,7 @@ local handlers = {
   BN_FRIEND_ACCOUNT_OFFLINE = nop,
   BN_FRIEND_ACCOUNT_ONLINE = nop,
   BN_FRIEND_INFO_CHANGED = nop,
-  CHAT_MSG_BN_INLINE_TOAST_ALERT = function(s)
-    print('[chat][bn]: ' .. s)
-  end,
+  CHAT_MSG_BN_INLINE_TOAST_ALERT = nop,
   CHAT_MSG_CHANNEL = function(s, p, _, c)
     print(('[chat][%s][%s]: %s'):format(c, p, s))
   end,
