@@ -60,6 +60,7 @@ local state = {
   incombat = false,
   inworld = false,
   loaded = false,
+  loadingscreen = true,
   loggedin = false,
   mousedown = {},
   moving = false,
@@ -240,6 +241,12 @@ local handlers = {
   LFG_LIST_AVAILABILITY_UPDATE = nop,
   LFG_LOCK_INFO_RECEIVED = nop,
   LFG_UPDATE_RANDOM_INFO = nop,
+  LOADING_SCREEN_DISABLED = function()
+    update('loadingscreen', false)
+  end,
+  LOADING_SCREEN_ENABLED = function()
+    update('loadingscreen', true)
+  end,
   LUA_WARNING = function(ty, msg)
     print(('[warning][%d] %s'):format(ty, msg))
   end,
