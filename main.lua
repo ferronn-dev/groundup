@@ -41,9 +41,7 @@ do
   local f = EnumerateFrames()
   while f do
     f:UnregisterAllEvents()
-    if f ~= WorldFrame then
-      f:Hide()
-    end
+    f:Hide()
     f = EnumerateFrames(f)
   end
 end
@@ -75,6 +73,7 @@ local state = {
 WorldFrame:ClearAllPoints()
 WorldFrame:SetPoint('TOPLEFT')
 WorldFrame:SetPoint('BOTTOMRIGHT', nil, 'CENTER')
+WorldFrame:Show()
 
 local mlog = {}
 

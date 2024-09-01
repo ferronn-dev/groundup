@@ -133,6 +133,7 @@ read_globals = {
       SetHeight = {},
       SetPoint = {},
       SetWidth = {},
+      Show = {},
     },
   },
 }
