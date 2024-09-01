@@ -285,6 +285,7 @@ local handlers = {
     update('inworld', true)
     update('zone', GetZoneText())
     update('subzone', GetSubZoneText())
+    update('money', GetMoney())
     for i = 1, GetNumBindings() do
       local t = { GetBinding(i) }
       for j = 3, #t do
@@ -308,6 +309,9 @@ local handlers = {
   end,
   PLAYER_LOGOUT = function()
     update('loggedin', false)
+  end,
+  PLAYER_MONEY = function()
+    update('money', GetMoney())
   end,
   PLAYER_QUITING = function()
     assert(not state.camping)

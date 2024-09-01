@@ -53,6 +53,7 @@ read_globals = {
   GetInventoryItemDurability = {},
   GetMerchantItemInfo = {},
   GetMerchantNumItems = {},
+  GetMoney = {},
   GetNumBindings = {},
   GetNumFactions = {},
   GetNumQuestChoices = {},
