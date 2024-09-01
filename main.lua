@@ -164,6 +164,7 @@ local handlers = {
   end,
   COMBAT_LOG_EVENT = nop, -- TODO process
   COMBAT_LOG_EVENT_UNFILTERED = nop, -- TODO process
+  COMPACT_UNIT_FRAME_PROFILES_LOADED = nop,
   CONSOLE_MESSAGE = function(s)
     print('[console] ' .. s)
   end,
@@ -277,6 +278,7 @@ local handlers = {
     -- with these events, e.g. Alt-Tabbing out of the game releases the
     -- modifier per IsAltKeyDown but a corresponding event does not fire.
   end,
+  MOUNT_JOURNAL_SEARCH_UPDATED = nop,
   NEW_WMO_CHUNK = nop,
   PET_JOURNAL_LIST_UPDATE = nop,
   PLAYER_AVG_ITEM_LEVEL_UPDATE = nop,
