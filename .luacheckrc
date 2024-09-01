@@ -23,6 +23,12 @@ read_globals = {
       SelectOption = {},
     },
   },
+  C_PlayerInteractionManager = {
+    fields = {
+      ClearInteraction = {},
+      ConfirmationInteraction = {},
+    },
+  },
   C_Timer = {
     fields = {
       After = {},
@@ -34,6 +40,15 @@ read_globals = {
   CompleteQuest = {},
   CreateFrame = {},
   DoEmote = {},
+  Enum = {
+    fields = {
+      PlayerInteractionType = {
+        fields = {
+          Binder = {},
+        },
+      },
+    },
+  },
   EnumerateFrames = {},
   EventRegistry = {
     fields = {
@@ -48,6 +63,7 @@ read_globals = {
   },
   ExpandFactionHeader = {},
   GetBinding = {},
+  GetBindLocation = {},
   GetFactionInfo = {},
   GetGameMessageInfo = {},
   GetInventoryItemDurability = {},

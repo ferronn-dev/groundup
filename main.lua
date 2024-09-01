@@ -158,6 +158,13 @@ local handlers = {
   COMBAT_LOG_EVENT = nop, -- TODO process
   COMBAT_LOG_EVENT_UNFILTERED = nop, -- TODO process
   COMPACT_UNIT_FRAME_PROFILES_LOADED = nop,
+  CONFIRM_BINDER = function()
+    state.gossiping = true -- a second GOSSIP_CLOSED will fire after this
+    C_Timer.After(0, function()
+      C_PlayerInteractionManager.ConfirmationInteraction(Enum.PlayerInteractionType.Binder)
+      C_PlayerInteractionManager.ClearInteraction(Enum.PlayerInteractionType.Binder)
+    end)
+  end,
   CONSOLE_MESSAGE = function(s)
     print('[console] ' .. s)
   end,
@@ -196,16 +203,19 @@ local handlers = {
     state.mousedown[b] = nil
   end,
   GOSSIP_CONFIRM_CANCEL = function()
-    print('[gossip][confirm cancel]')
+    assert(not state.gossipconfirmcancel)
+    state.gossipconfirmcancel = true
   end,
   GOSSIP_CLOSED = function()
     assert(state.gossiping)
     state.gossiping = false
+    state.gossipconfirmcancel = false
     print('[gossip][closed]')
   end,
   GOSSIP_SHOW = function()
-    assert(not state.gossiping)
+    assert(not state.gossiping or state.gossipconfirmcancel)
     state.gossiping = true
+    state.gossipconfirmcancel = false
     print('[gossip] ' .. C_GossipInfo.GetText())
     local options = C_GossipInfo.GetOptions()
     for _, o in ipairs(options) do
@@ -235,6 +245,9 @@ local handlers = {
       print('[gossip] auto-selecting active quest')
       C_GossipInfo.SelectActiveQuest(activeQuests[1].questID)
     end
+  end,
+  HEARTHSTONE_BOUND = function()
+    update('hearthstone', GetBindLocation())
   end,
   LFG_LIST_AVAILABILITY_UPDATE = nop,
   LFG_LOCK_INFO_RECEIVED = nop,
