@@ -146,8 +146,11 @@ local handlers = {
   CHAT_MSG_MONSTER_SAY = function(text, playerName)
     print(('[chat][monster][%s] %s'):format(playerName, text))
   end,
-  CHAT_MSG_SAY = function(s)
-    print('[chat][say] ' .. s)
+  CHAT_MSG_PET_INFO = function(text, playerName)
+    print(('[chat][pet][%s] %s'):format(playerName, text))
+  end,
+  CHAT_MSG_SAY = function(text, playerName)
+    print(('[chat][say][%s] %s'):format(playerName, text))
   end,
   CHAT_MSG_SYSTEM = function(s)
     print('[chat][system] ' .. s)
