@@ -1,3 +1,12 @@
+globals = {
+  GroundUpSavedVariable = {
+    fields = {
+      mlog = {
+        other_fields = true,
+      },
+    },
+  },
+}
 read_globals = {
   AbandonQuest = {},
   AcceptQuest = {},
@@ -62,6 +71,7 @@ read_globals = {
   GetRewardMoney = {},
   GetRewardText = {},
   GetRewardXP = {},
+  GetServerTime = {},
   GetSubZoneText = {},
   GetTitleText = {},
   GetTrainerGreetingText = {},

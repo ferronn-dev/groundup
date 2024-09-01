@@ -83,6 +83,8 @@ WorldFrame:ClearAllPoints()
 WorldFrame:SetPoint('TOPLEFT')
 WorldFrame:SetPoint('BOTTOMRIGHT', nil, 'CENTER')
 
+local mlog = {}
+
 local print = (function()
   local m = CreateFrame('MessageFrame')
   m:SetPoint('TOPRIGHT')
@@ -96,7 +98,9 @@ local print = (function()
     tick = tick + 1
   end)
   return function(s)
-    m:AddMessage('[' .. tick .. '] ' .. tostring(s), 0, 1, 0)
+    local ss = '[' .. tick .. '] ' .. tostring(s)
+    table.insert(mlog, ss)
+    m:AddMessage(ss, 0, 1, 0)
   end
 end)()
 
@@ -123,6 +127,8 @@ local handlers = {
       assert(containsBindings == false)
       assert(not state.loaded)
       state.loaded = true
+      GroundUpSavedVariable = GroundUpSavedVariable or {}
+      GroundUpSavedVariable[GetServerTime()] = mlog
     end
   end,
   AREA_POIS_UPDATED = nop,
@@ -668,7 +674,8 @@ for k, v in pairs(securecmds) do
   end
 end
 secureButton:HookScript('OnClick', function(_, b)
-  insecurecmds[b]()
+  local fn = insecurecmds[b]
+  return fn and fn()
 end)
 
 -- This is necessary to get C_Macro.SetMacroExecuteLineCallback called.
