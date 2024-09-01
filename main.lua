@@ -560,6 +560,7 @@ local handlers = {
   UPDATE_SHAPESHIFT_FORM = function()
     -- We'll probably want to resurrect this at some point, but for now it's just noise.
   end,
+  UPDATE_SUMMONPETS_ACTION = nop, -- no battle pets in era
   UPDATE_WEB_TICKET = nop,
   VARIABLES_LOADED = function()
     local cvars = {
