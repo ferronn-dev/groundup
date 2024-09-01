@@ -107,6 +107,7 @@ local function update(k, new)
 end
 
 local handlers = {
+  ACTIONBAR_UPDATE_COOLDOWN = nop,
   ACTIONBAR_UPDATE_STATE = nop,
   ACTIONBAR_UPDATE_USABLE = nop,
   ADDON_ACTION_BLOCKED = function()
@@ -554,6 +555,7 @@ local handlers = {
     local m = UnitGUID('mouseover')
     state.mouseoverunit = (state.mouseoverunit ~= m) and m or nil
   end,
+  UPDATE_OVERRIDE_ACTIONBAR = nop,
   UPDATE_PENDING_MAIL = function()
     update('hasmail', HasNewMail())
   end,
