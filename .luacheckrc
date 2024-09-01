@@ -81,6 +81,7 @@ read_globals = {
   GetZoneText = {},
   HasNewMail = {},
   hooksecurefunc = {},
+  IsResting = {},
   Mixin = {},
   ReloadUI = {},
   SelectQuestLogEntry = {},

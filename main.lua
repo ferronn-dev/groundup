@@ -66,6 +66,7 @@ local state = {
   quest = false,
   quitting = false,
   regen = true,
+  resting = IsResting(),
   training = false,
   turning = false,
 }
@@ -342,6 +343,9 @@ local handlers = {
   end,
   PLAYER_TARGET_CHANGED = function()
     update('targetname', UnitName('target'))
+  end,
+  PLAYER_UPDATE_RESTING = function()
+    update('resting', IsResting())
   end,
   QUEST_ACCEPTED = function(entry, questID)
     print(('[questlog] accepted questID %d (entry %d)'):format(questID, entry))
