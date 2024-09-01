@@ -400,6 +400,7 @@ local handlers = {
   QUEST_REMOVED = function(questID)
     print('[questlog] removed questID ' .. questID)
   end,
+  QUEST_WATCH_LIST_CHANGED = nop, -- we just ignore this state
   RAID_TARGET_UPDATE = function()
     local old = state.playerraidtarget
     local new = GetRaidTargetIndex('player')
