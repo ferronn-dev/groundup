@@ -118,6 +118,7 @@ end
 
 local handlers = {
   ACTIONBAR_UPDATE_STATE = nop,
+  ACTIONBAR_UPDATE_USABLE = nop,
   ADDON_ACTION_BLOCKED = function()
     print('addon action blocked!')
   end,
