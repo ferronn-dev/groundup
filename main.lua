@@ -155,6 +155,9 @@ local handlers = {
   CHAT_MSG_TRADESKILLS = function(text, playerName)
     print(('[chat][tradeskills][%s] %s'):format(playerName, text))
   end,
+  CHAT_MSG_YELL = function(text, playerName)
+    print(('[chat][yell][%s] %s'):format(playerName, text))
+  end,
   COMBAT_LOG_EVENT = nop, -- TODO process
   COMBAT_LOG_EVENT_UNFILTERED = nop, -- TODO process
   COMPACT_UNIT_FRAME_PROFILES_LOADED = nop,
