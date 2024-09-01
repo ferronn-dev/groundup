@@ -100,6 +100,14 @@ read_globals = {
   HasNewMail = {},
   hooksecurefunc = {},
   IsResting = {},
+  Minimap = {
+    fields = {
+      ClearAllPoints = {},
+      SetParent = {},
+      SetPoint = {},
+      Show = {},
+    },
+  },
   Mixin = {},
   ReloadUI = {},
   SelectQuestLogEntry = {},

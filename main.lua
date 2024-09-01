@@ -75,6 +75,11 @@ WorldFrame:SetPoint('TOPLEFT')
 WorldFrame:SetPoint('BOTTOMRIGHT', nil, 'CENTER')
 WorldFrame:Show()
 
+Minimap:ClearAllPoints()
+Minimap:SetParent(nil)
+Minimap:SetPoint('TOPRIGHT')
+Minimap:Show()
+
 local mlog = {}
 
 local print = (function()
