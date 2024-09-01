@@ -266,6 +266,12 @@ local handlers = {
       print('[merchant] ' .. tostring(GetMerchantItemInfo(i)))
     end
   end,
+  MIRROR_TIMER_START = function(name, value, max, scale, paused)
+    update('mirror.' .. name, ('%d|%d|%d|%d'):format(value, max, scale, paused))
+  end,
+  MIRROR_TIMER_STOP = function(name)
+    update('mirror.' .. name, nil)
+  end,
   MODIFIER_STATE_CHANGED = function()
     -- This is not reliable since Is*KeyDown functions can get out of sync
     -- with these events, e.g. Alt-Tabbing out of the game releases the
