@@ -35,6 +35,7 @@ read_globals = {
     },
   },
   CancelLogout = {},
+  CloseMail = {},
   CloseMerchant = {},
   CloseTrainer = {},
   CompleteQuest = {},

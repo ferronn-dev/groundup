@@ -61,6 +61,7 @@ local state = {
   loaded = false,
   loadingscreen = true,
   loggedin = false,
+  mailing = false,
   mousedown = {},
   moving = false,
   quest = false,
@@ -264,6 +265,11 @@ local handlers = {
   LUA_WARNING = function(ty, msg)
     print(('[warning][%d] %s'):format(ty, msg))
   end,
+  MAIL_SHOW = function()
+    assert(not state.mailing)
+    state.mailing = true
+    print('[mail][open]')
+  end,
   MERCHANT_CLOSED = function()
     assert(state.merching)
     state.merching = false
@@ -432,6 +438,11 @@ local handlers = {
       print('player raid target was ' .. tostring(old) .. ', now ' .. tostring(new))
     end
     state.playerraidtarget = new
+  end,
+  SECURE_TRANSFER_CANCEL = function()
+    assert(state.mailing)
+    state.mailing = false
+    print('[mail][closed]')
   end,
   SPELL_ACTIVATION_OVERLAY_HIDE = nop,
   SPELL_UPDATE_USABLE = nop,
@@ -704,6 +715,8 @@ local insecurecmds = {
     elseif state.incombat then
       StopAttack()
       assert(state.incombat) -- PLAYER_LEAVE_COMBAT delivered later
+    elseif state.mailing then
+      CloseMail()
     else
       print('[error] nothing to cancel')
     end
