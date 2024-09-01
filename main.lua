@@ -50,7 +50,6 @@ end
 
 local state = {
   camping = false,
-  chatchannels = {},
   cursor = 0,
   expectflags = false,
   factions = {},
@@ -71,15 +70,6 @@ local state = {
   training = false,
   turning = false,
 }
-
-local function ensuret(t, k)
-  local v = t[k]
-  if not v then
-    v = {}
-    t[k] = v
-  end
-  return v
-end
 
 WorldFrame:ClearAllPoints()
 WorldFrame:SetPoint('TOPLEFT')
@@ -140,6 +130,7 @@ local handlers = {
   BN_FRIEND_ACCOUNT_OFFLINE = nop,
   BN_FRIEND_ACCOUNT_ONLINE = nop,
   BN_FRIEND_INFO_CHANGED = nop,
+  CALENDAR_ACTION_PENDING = nop,
   CHAT_MSG_BN_INLINE_TOAST_ALERT = nop,
   CHAT_MSG_CHANNEL = function(s, p, _, c)
     print(('[chat][%s][%s]: %s'):format(c, p, s))
@@ -512,12 +503,9 @@ local handlers = {
       print('[error] unexpected UPDATE_BINDINGS')
     end
   end,
-  UPDATE_CHAT_COLOR = function(name, r, g, b)
-    Mixin(ensuret(state.chatchannels, name), { r = r, g = g, b = b })
-  end,
-  UPDATE_CHAT_COLOR_NAME_BY_CLASS = function(name, colorNameByClass)
-    Mixin(ensuret(state.chatchannels, name), { colorNameByClass = colorNameByClass })
-  end,
+  UPDATE_CHAT_COLOR = nop,
+  UPDATE_CHAT_COLOR_NAME_BY_CLASS = nop,
+  UPDATE_CHAT_WINDOWS = nop,
   UPDATE_FACTION = (function()
     local processing = false
     return function()
