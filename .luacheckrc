@@ -86,6 +86,7 @@ read_globals = {
   Mixin = {},
   ReloadUI = {},
   SelectQuestLogEntry = {},
+  SendChatMessage = {},
   SetAbandonQuest = {},
   SetCVar = {},
   seterrorhandler = {},
@@ -105,6 +106,8 @@ read_globals = {
   },
   UnitGUID = {},
   UnitHealth = {},
+  UnitIsAFK = {},
+  UnitIsDND = {},
   UnitName = {},
   UnitPower = {},
   WorldFrame = {

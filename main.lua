@@ -131,6 +131,7 @@ local handlers = {
   BN_FRIEND_ACCOUNT_OFFLINE = nop,
   BN_FRIEND_ACCOUNT_ONLINE = nop,
   BN_FRIEND_INFO_CHANGED = nop,
+  BN_INFO_CHANGED = nop,
   CALENDAR_ACTION_PENDING = nop,
   CHAT_MSG_BN_INLINE_TOAST_ALERT = nop,
   CHAT_MSG_CHANNEL = function(s, p, _, c)
@@ -290,6 +291,8 @@ local handlers = {
     update('zone', GetZoneText())
     update('subzone', GetSubZoneText())
     update('money', GetMoney())
+    update('unit:player:afk', UnitIsAFK('player'))
+    update('unit:player:dnd', UnitIsDND('player'))
     for i = 1, GetNumBindings() do
       local t = { GetBinding(i) }
       for j = 3, #t do
@@ -299,6 +302,10 @@ local handlers = {
     for k, v in pairs(bindings) do
       SetOverrideBinding(WorldFrame, false, k, v)
     end
+  end,
+  PLAYER_FLAGS_CHANGED = function(unit)
+    update('unit:' .. unit .. ':afk', UnitIsAFK(unit))
+    update('unit:' .. unit .. ':dnd', UnitIsDND(unit))
   end,
   PLAYER_INTERACTION_MANAGER_FRAME_HIDE = nop,
   PLAYER_INTERACTION_MANAGER_FRAME_SHOW = nop,
@@ -624,6 +631,10 @@ local function run(cmd)
     DoEmote('stand')
   elseif cmd == 'reload' then
     ReloadUI()
+  elseif cmd == 'afk' then
+    SendChatMessage('', 'AFK')
+  elseif cmd == 'dnd' then
+    SendChatMessage('', 'DND')
   elseif cmd:sub(1, 6) == 'train ' then
     BuyTrainerService(tonumber(cmd:sub(7)))
   elseif cmd:sub(1, 21) == 'gossip select option ' then
