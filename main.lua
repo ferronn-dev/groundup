@@ -640,6 +640,9 @@ local function run(cmd)
     AbandonQuest()
   elseif cmd == 'spam' then
     update('groundupeventspam', not state.groundupeventspam)
+  elseif cmd == 'baseui' then
+    GroundUpSavedVariable.baseui = true
+    ReloadUI()
   else
     print('[error] bad command')
   end
@@ -692,9 +695,18 @@ do
     assert(ev == 'ADDON_LOADED')
     assert(addonName == thisAddonName)
     assert(containsBindings == false)
+    eventHandler:UnregisterAllEvents()
+    GroundUpSavedVariable = GroundUpSavedVariable or { baseui = false, printlog = {} }
+    if GroundUpSavedVariable.baseui then
+      SLASH_GROUNDUP1 = '/groundup'
+      SlashCmdList.GROUNDUP = function()
+        GroundUpSavedVariable.baseui = false
+        ReloadUI()
+      end
+      return
+    end
     assert(not state.loaded)
     state.loaded = true
-    GroundUpSavedVariable = GroundUpSavedVariable or { printlog = {} }
     GroundUpSavedVariable.printlog[GetServerTime()] = mlog
     do
       local f = EnumerateFrames()

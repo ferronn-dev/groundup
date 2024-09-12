@@ -1,11 +1,18 @@
 globals = {
   GroundUpSavedVariable = {
     fields = {
+      baseui = {},
       printlog = {
         other_fields = true,
       },
     },
   },
+  SlashCmdList = {
+    fields = {
+      GROUNDUP = {},
+    },
+  },
+  SLASH_GROUNDUP1 = {},
 }
 read_globals = {
   AbandonQuest = {},
