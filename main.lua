@@ -76,6 +76,14 @@ local function update(k, new)
   end
 end
 
+local enumrev = (function()
+  local t = {}
+  for k, v in pairs(Enum.PlayerInteractionType) do
+    t[v] = k
+  end
+  return { PlayerInteractionType = t }
+end)()
+
 local handlers = {
   ACTIONBAR_UPDATE_COOLDOWN = nop,
   ACTIONBAR_UPDATE_STATE = nop,
@@ -303,8 +311,12 @@ local handlers = {
     update('unit:' .. unit .. ':afk', UnitIsAFK(unit))
     update('unit:' .. unit .. ':dnd', UnitIsDND(unit))
   end,
-  PLAYER_INTERACTION_MANAGER_FRAME_HIDE = nop,
-  PLAYER_INTERACTION_MANAGER_FRAME_SHOW = nop,
+  PLAYER_INTERACTION_MANAGER_FRAME_HIDE = function(ty)
+    print('[interaction] hide ' .. enumrev.PlayerInteractionType[ty])
+  end,
+  PLAYER_INTERACTION_MANAGER_FRAME_SHOW = function(ty)
+    print('[interaction] show ' .. enumrev.PlayerInteractionType[ty])
+  end,
   PLAYER_LEAVE_COMBAT = function()
     update('incombat', false)
   end,
