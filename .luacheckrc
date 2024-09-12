@@ -35,6 +35,7 @@ read_globals = {
     },
   },
   CancelLogout = {},
+  CloseBankFrame = {},
   CloseMail = {},
   CloseMerchant = {},
   CloseTrainer = {},

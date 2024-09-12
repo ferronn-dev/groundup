@@ -47,6 +47,7 @@ do
 end
 
 local state = {
+  banking = false,
   camping = false,
   cursor = 0,
   expectflags = false,
@@ -133,6 +134,16 @@ local handlers = {
   AREA_POIS_UPDATED = nop,
   ARENA_OPPONENT_UPDATE = nop,
   ARENA_TEAM_ROSTER_UPDATE = nop,
+  BANKFRAME_CLOSED = function()
+    assert(state.banking)
+    state.banking = false
+    print('[bank][closed]')
+  end,
+  BANKFRAME_OPENED = function()
+    assert(not state.banking)
+    state.banking = true
+    print('[bank][open]')
+  end,
   BN_FRIEND_ACCOUNT_OFFLINE = nop,
   BN_FRIEND_ACCOUNT_ONLINE = nop,
   BN_FRIEND_INFO_CHANGED = nop,
@@ -724,6 +735,8 @@ local insecurecmds = {
       assert(state.incombat) -- PLAYER_LEAVE_COMBAT delivered later
     elseif state.mailing then
       CloseMail()
+    elseif state.banking then
+      CloseBankFrame()
     else
       print('[error] nothing to cancel')
     end
