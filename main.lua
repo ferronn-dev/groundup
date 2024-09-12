@@ -128,8 +128,8 @@ local handlers = {
       assert(containsBindings == false)
       assert(not state.loaded)
       state.loaded = true
-      GroundUpSavedVariable = GroundUpSavedVariable or {}
-      GroundUpSavedVariable[GetServerTime()] = mlog
+      GroundUpSavedVariable = GroundUpSavedVariable or { printlog = {} }
+      GroundUpSavedVariable.printlog[GetServerTime()] = mlog
     end
   end,
   AREA_POIS_UPDATED = nop,

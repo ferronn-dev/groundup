@@ -1,7 +1,7 @@
 globals = {
   GroundUpSavedVariable = {
     fields = {
-      mlog = {
+      printlog = {
         other_fields = true,
       },
     },
