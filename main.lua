@@ -259,9 +259,36 @@ local handlers = {
   end,
   MERCHANT_SHOW = function()
     assert(not state.merching)
+    assert(not state.merchupdatepending)
     state.merching = true
+    local names = {}
     for i = 1, GetMerchantNumItems() do
-      print('[merchant] ' .. tostring(GetMerchantItemInfo(i)))
+      local name = GetMerchantItemInfo(i)
+      if not name then
+        state.merchupdatepending = true
+        return
+      end
+      table.insert(names, name)
+    end
+    for i, name in ipairs(names) do
+      print(('[merchant][%d] %s'):format(i, name))
+    end
+  end,
+  MERCHANT_UPDATE = function()
+    assert(state.merching)
+    assert(state.merchupdatepending)
+    local names = {}
+    for i = 1, GetMerchantNumItems() do
+      local name = GetMerchantItemInfo(i)
+      if not name then
+        state.merchupdatepending = true
+        return
+      end
+      table.insert(names, name)
+    end
+    state.merchupdatepending = false
+    for i, name in ipairs(names) do
+      print(('[merchant][%d] %s'):format(i, name))
     end
   end,
   MIRROR_TIMER_START = function(name, value, max, scale, paused)
