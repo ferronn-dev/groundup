@@ -136,7 +136,6 @@ local handlers = {
   COMBAT_LOG_EVENT_UNFILTERED = nop, -- TODO process
   COMPACT_UNIT_FRAME_PROFILES_LOADED = nop,
   CONFIRM_BINDER = function()
-    state.gossiping = true -- a second GOSSIP_CLOSED will fire after this
     C_Timer.After(0, function()
       C_PlayerInteractionManager.ConfirmationInteraction(Enum.PlayerInteractionType.Binder)
       C_PlayerInteractionManager.ClearInteraction(Enum.PlayerInteractionType.Binder)
