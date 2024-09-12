@@ -37,15 +37,6 @@ local securecmds = {
   },
 }
 
-do
-  local f = EnumerateFrames()
-  while f do
-    f:UnregisterAllEvents()
-    f:Hide()
-    f = EnumerateFrames(f)
-  end
-end
-
 local state = {
   banking = false,
   camping = false,
@@ -72,36 +63,8 @@ local state = {
   turning = false,
 }
 
-WorldFrame:ClearAllPoints()
-WorldFrame:SetPoint('TOPLEFT')
-WorldFrame:SetPoint('BOTTOMRIGHT', nil, 'CENTER')
-WorldFrame:Show()
-
-Minimap:ClearAllPoints()
-Minimap:SetParent(nil)
-Minimap:SetPoint('TOPRIGHT')
-Minimap:Show()
-
 local mlog = {}
-
-local print = (function()
-  local m = CreateFrame('MessageFrame')
-  m:SetPoint('TOPRIGHT')
-  m:SetPoint('BOTTOM')
-  m:SetPoint('LEFT', nil, 'CENTER')
-  m:SetFont(('Interface\\AddOns\\%s\\Inconsolata.ttf'):format(thisAddonName), 10, '')
-  m:SetJustifyH('LEFT')
-  m:SetTimeVisible(3.402823e38)
-  local tick = 0
-  m:SetScript('OnUpdate', function()
-    tick = tick + 1
-  end)
-  return function(s)
-    local ss = '[' .. tick .. '] ' .. tostring(s)
-    table.insert(mlog, ss)
-    m:AddMessage(ss, 0, 1, 0)
-  end
-end)()
+local print = print
 
 local function nop() end
 
@@ -123,14 +86,8 @@ local handlers = {
   ADDON_ACTION_FORBIDDEN = function(taint, func)
     print(('[ERROR] forbidden from calling %s (%s)'):format(func, taint))
   end,
-  ADDON_LOADED = function(addonName, containsBindings)
-    if addonName == thisAddonName then
-      assert(containsBindings == false)
-      assert(not state.loaded)
-      state.loaded = true
-      GroundUpSavedVariable = GroundUpSavedVariable or { printlog = {} }
-      GroundUpSavedVariable.printlog[GetServerTime()] = mlog
-    end
+  ADDON_LOADED = function(addonName)
+    print(('[error] unexpected ADDON_LOADED %q'):format(addonName))
   end,
   AREA_POIS_UPDATED = nop,
   ARENA_OPPONENT_UPDATE = nop,
@@ -639,24 +596,6 @@ local handlers = {
   end,
 }
 
-local f = CreateFrame('Frame')
-f:SetScript('OnEvent', function(_, ev, ...)
-  if state.groundupeventspam then
-    print(ev)
-  end
-  local h = handlers[ev]
-  if h then
-    h(...)
-  else
-    print('unsupported event ' .. ev)
-  end
-end)
-f:RegisterAllEvents()
-
-seterrorhandler(function(s)
-  print('lua error: ' .. s)
-end)
-
 local lsmt = {
   __index = function(_, k)
     return k == 'print' and print or _G[k]
@@ -706,24 +645,7 @@ local function run(cmd)
   end
 end
 
-local e = CreateFrame('EditBox')
-e:SetPoint('BOTTOMLEFT')
-e:SetPoint('RIGHT', nil, 'CENTER')
-e:SetHeight(20)
-e:SetFont(('Interface\\AddOns\\%s\\Inconsolata.ttf'):format(thisAddonName), 10, '')
-e:SetTextColor(0, 1, 0)
-e:SetText('')
-e:SetAutoFocus(false)
-e:SetHistoryLines(100)
-e:SetScript('OnEnterPressed', function()
-  local s = e:GetText()
-  run(s)
-  e:AddHistoryLine(s)
-  e:SetText('')
-end)
-e:SetScript('OnEscapePressed', function()
-  e:ClearFocus()
-end)
+local editbox
 
 local insecurecmds = {
   cancel = function()
@@ -748,31 +670,113 @@ local insecurecmds = {
     end
   end,
   focus = function()
-    e:SetFocus()
+    editbox:SetFocus()
   end,
 }
 
-local secureButton = CreateFrame('Button', 'GroundUpSecureButton', nil, 'SecureActionButtonTemplate')
-for k, v in pairs(securecmds) do
-  for ck, cv in pairs(v) do
-    secureButton:SetAttribute(ck .. '-' .. k, cv)
+do
+  local mainScript = function(_, ev, ...)
+    if state.groundupeventspam then
+      print(ev)
+    end
+    local h = handlers[ev]
+    if h then
+      h(...)
+    else
+      print('unsupported event ' .. ev)
+    end
   end
+  local eventHandler = CreateFrame('Frame')
+  eventHandler:RegisterAllEvents()
+  eventHandler:SetScript('OnEvent', function(_, ev, addonName, containsBindings)
+    assert(ev == 'ADDON_LOADED')
+    assert(addonName == thisAddonName)
+    assert(containsBindings == false)
+    assert(not state.loaded)
+    state.loaded = true
+    GroundUpSavedVariable = GroundUpSavedVariable or { printlog = {} }
+    GroundUpSavedVariable.printlog[GetServerTime()] = mlog
+    do
+      local f = EnumerateFrames()
+      while f do
+        f:UnregisterAllEvents()
+        f:Hide()
+        f = EnumerateFrames(f)
+      end
+    end
+    WorldFrame:ClearAllPoints()
+    WorldFrame:SetPoint('TOPLEFT')
+    WorldFrame:SetPoint('BOTTOMRIGHT', nil, 'CENTER')
+    WorldFrame:Show()
+    Minimap:ClearAllPoints()
+    Minimap:SetParent(nil)
+    Minimap:SetPoint('TOPRIGHT')
+    Minimap:Show()
+    print = (function()
+      local m = CreateFrame('MessageFrame')
+      m:SetPoint('TOPRIGHT')
+      m:SetPoint('BOTTOM')
+      m:SetPoint('LEFT', nil, 'CENTER')
+      m:SetFont(('Interface\\AddOns\\%s\\Inconsolata.ttf'):format(thisAddonName), 10, '')
+      m:SetJustifyH('LEFT')
+      m:SetTimeVisible(3.402823e38)
+      local tick = 0
+      m:SetScript('OnUpdate', function()
+        tick = tick + 1
+      end)
+      return function(s)
+        local ss = '[' .. tick .. '] ' .. tostring(s)
+        table.insert(mlog, ss)
+        m:AddMessage(ss, 0, 1, 0)
+      end
+    end)()
+    editbox = (function()
+      local e = CreateFrame('EditBox')
+      e:SetPoint('BOTTOMLEFT')
+      e:SetPoint('RIGHT', nil, 'CENTER')
+      e:SetHeight(20)
+      e:SetFont(('Interface\\AddOns\\%s\\Inconsolata.ttf'):format(thisAddonName), 10, '')
+      e:SetTextColor(0, 1, 0)
+      e:SetText('')
+      e:SetAutoFocus(false)
+      e:SetHistoryLines(100)
+      e:SetScript('OnEnterPressed', function()
+        local s = e:GetText()
+        run(s)
+        e:AddHistoryLine(s)
+        e:SetText('')
+      end)
+      e:SetScript('OnEscapePressed', function()
+        e:ClearFocus()
+      end)
+      return e
+    end)()
+    seterrorhandler(function(s)
+      print('lua error: ' .. s)
+    end)
+    local secureButton = CreateFrame('Button', 'GroundUpSecureButton', nil, 'SecureActionButtonTemplate')
+    for k, v in pairs(securecmds) do
+      for ck, cv in pairs(v) do
+        secureButton:SetAttribute(ck .. '-' .. k, cv)
+      end
+    end
+    secureButton:HookScript('OnClick', function(_, b)
+      local fn = insecurecmds[b]
+      return fn and fn()
+    end)
+    -- This is necessary to get C_Macro.SetMacroExecuteLineCallback called.
+    -- Otherwise, macro execution is completely disabled.
+    EventRegistry.frameEventFrame:RegisterEvent('PLAYER_ENTERING_WORLD')
+    EventRegistry.frameEventFrame:HookScript('OnEvent', function()
+      EventRegistry.frameEventFrame:UnregisterAllEvents()
+    end)
+    -- Hack for static popups.
+    UIParent:RegisterEvent('PLAYER_QUITING')
+    UIParent:RegisterEvent('PLAYER_CAMPING')
+    hooksecurefunc(StaticPopup1Text, 'SetFormattedText', function(_, fmt, ...)
+      update('popup', fmt:format(...))
+    end)
+    eventHandler:RegisterAllEvents()
+    eventHandler:SetScript('OnEvent', mainScript)
+  end)
 end
-secureButton:HookScript('OnClick', function(_, b)
-  local fn = insecurecmds[b]
-  return fn and fn()
-end)
-
--- This is necessary to get C_Macro.SetMacroExecuteLineCallback called.
--- Otherwise, macro execution is completely disabled.
-EventRegistry.frameEventFrame:RegisterEvent('PLAYER_ENTERING_WORLD')
-EventRegistry.frameEventFrame:HookScript('OnEvent', function()
-  EventRegistry.frameEventFrame:UnregisterAllEvents()
-end)
-
--- Hack for static popups.
-UIParent:RegisterEvent('PLAYER_QUITING')
-UIParent:RegisterEvent('PLAYER_CAMPING')
-hooksecurefunc(StaticPopup1Text, 'SetFormattedText', function(_, fmt, ...)
-  update('popup', fmt:format(...))
-end)
