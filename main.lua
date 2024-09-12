@@ -55,6 +55,7 @@ local state = {
   hasmail = false,
   merching = false,
   gossiping = false,
+  groundupeventspam = false,
   incombat = false,
   inworld = false,
   loaded = false,
@@ -640,6 +641,9 @@ local handlers = {
 
 local f = CreateFrame('Frame')
 f:SetScript('OnEvent', function(_, ev, ...)
+  if state.groundupeventspam then
+    print(ev)
+  end
   local h = handlers[ev]
   if h then
     h(...)
@@ -695,6 +699,8 @@ local function run(cmd)
     SelectQuestLogEntry(k)
     SetAbandonQuest()
     AbandonQuest()
+  elseif cmd == 'spam' then
+    update('groundupeventspam', not state.groundupeventspam)
   else
     print('[error] bad command')
   end
