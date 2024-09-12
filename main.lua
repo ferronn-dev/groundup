@@ -666,8 +666,10 @@ local insecurecmds = {
       assert(state.incombat) -- PLAYER_LEAVE_COMBAT delivered later
     elseif state.mailing then
       CloseMail()
+      assert(not state.mailing)
     elseif state.banking then
       CloseBankFrame()
+      assert(not state.banking)
     else
       print('[error] nothing to cancel')
     end
