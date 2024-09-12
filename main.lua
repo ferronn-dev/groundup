@@ -183,11 +183,13 @@ local handlers = {
     assert(not state.gossipconfirmcancel)
     state.gossipconfirmcancel = true
   end,
-  GOSSIP_CLOSED = function()
+  GOSSIP_CLOSED = function(continuing)
     assert(state.gossiping)
-    state.gossiping = false
-    state.gossipconfirmcancel = false
-    print('[gossip][closed]')
+    if not continuing then
+      state.gossiping = false
+      state.gossipconfirmcancel = false
+      print('[gossip][closed]')
+    end
   end,
   GOSSIP_SHOW = function()
     assert(not state.gossiping or state.gossipconfirmcancel)
