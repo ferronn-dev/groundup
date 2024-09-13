@@ -23,6 +23,10 @@ local bindings = {
   ['RIGHT'] = 'TURNRIGHT',
 }
 local securecmds = {
+  cancel = {
+    type = 'target',
+    unit = 'none',
+  },
   hearthstone = {
     item = 'Hearthstone',
     type = 'item',
@@ -710,8 +714,6 @@ local insecurecmds = {
     elseif state.banking then
       CloseBankFrame()
       assert(not state.banking)
-    else
-      print('[error] nothing to cancel')
     end
   end,
   focus = function()
