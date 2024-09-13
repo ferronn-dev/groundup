@@ -717,12 +717,24 @@ local run = (function()
   end
   local function process(f, s, _, ...)
     if s ~= nil then
-      f(...)
+      local t, n = { ... }, select('#', ...)
+      return function()
+        f(unpack(t, 1, n))
+      end
     end
   end
   return function(cmd)
+    local t = {}
     for k, v in pairs(scmds) do
-      process(v, cmd:find(k))
+      t[k] = process(v, cmd:find(k))
+    end
+    local k, v = next(t)
+    if not k then
+      print('[error] invalid command')
+    elseif next(t, k) then
+      print('[error] multiple commands matched')
+    else
+      v()
     end
   end
 end)()
