@@ -646,51 +646,65 @@ local lsmt = {
   end,
 }
 
-local function run(cmd)
-  if cmd:sub(1, 1) == '.' then
-    setfenv(loadstring(cmd:sub(2), '@'), setmetatable({}, lsmt))()
-  elseif cmd:sub(1, 5) == 'echo ' then
-    print('[echo] ' .. cmd:sub(6))
-  elseif cmd == 'factions' then
-    for k, v in pairs(state.factions) do
-      print('[faction] ' .. k .. ': ' .. v)
-    end
-  elseif cmd == 'noquit' then
-    CancelLogout()
-    DoEmote('stand')
-  elseif cmd == 'reload' then
-    ReloadUI()
-  elseif cmd == 'afk' then
-    SendChatMessage('', 'AFK')
-  elseif cmd == 'dnd' then
-    SendChatMessage('', 'DND')
-  elseif cmd:sub(1, 6) == 'train ' then
-    BuyTrainerService(tonumber(cmd:sub(7)))
-  elseif cmd:sub(1, 21) == 'gossip select option ' then
-    C_GossipInfo.SelectOption(tonumber(cmd:sub(22)))
-  elseif cmd == 'questlog list' then
-    for i = 1, GetNumQuestLogEntries() do
-      local title, level, _, isHeader, isCollapsed, isComplete, _, questID = GetQuestLogTitle(i)
-      assert(not isCollapsed)
-      if not isHeader then
-        print(('[questlog][%d][%d][L%d][%s] %s'):format(i, questID, level, isComplete and '*' or '.', title))
+local run = (function()
+  local cmds = {
+    ['afk'] = function()
+      SendChatMessage('', 'AFK')
+    end,
+    ['baseui'] = function()
+      GroundUpSavedVariable.baseui = true
+      ReloadUI()
+    end,
+    ['dnd'] = function()
+      SendChatMessage('', 'DND')
+    end,
+    ['factions'] = function()
+      for k, v in pairs(state.factions) do
+        print('[faction] ' .. k .. ': ' .. v)
       end
+    end,
+    ['noquit'] = function()
+      CancelLogout()
+      DoEmote('stand')
+    end,
+    ['questlog list'] = function()
+      for i = 1, GetNumQuestLogEntries() do
+        local title, level, _, isHeader, isCollapsed, isComplete, _, questID = GetQuestLogTitle(i)
+        assert(not isCollapsed)
+        if not isHeader then
+          print(('[questlog][%d][%d][L%d][%s] %s'):format(i, questID, level, isComplete and '*' or '.', title))
+        end
+      end
+    end,
+    ['reload'] = function()
+      ReloadUI()
+    end,
+    ['spam'] = function()
+      update('groundupeventspam', not state.groundupeventspam)
+    end,
+  }
+  return function(cmd)
+    if cmd:sub(1, 1) == '.' then
+      setfenv(loadstring(cmd:sub(2), '@'), setmetatable({}, lsmt))()
+    elseif cmd:sub(1, 5) == 'echo ' then
+      print('[echo] ' .. cmd:sub(6))
+    elseif cmd:sub(1, 6) == 'train ' then
+      BuyTrainerService(tonumber(cmd:sub(7)))
+    elseif cmd:sub(1, 21) == 'gossip select option ' then
+      C_GossipInfo.SelectOption(tonumber(cmd:sub(22)))
+    elseif cmd:sub(1, 17) == 'questlog abandon ' then
+      local k = tonumber(cmd:sub(18))
+      print('[questlog] abandoning entry ' .. k)
+      SelectQuestLogEntry(k)
+      SetAbandonQuest()
+      AbandonQuest()
+    elseif cmds[cmd] then
+      cmds[cmd]()
+    else
+      print('[error] bad command')
     end
-  elseif cmd:sub(1, 17) == 'questlog abandon ' then
-    local k = tonumber(cmd:sub(18))
-    print('[questlog] abandoning entry ' .. k)
-    SelectQuestLogEntry(k)
-    SetAbandonQuest()
-    AbandonQuest()
-  elseif cmd == 'spam' then
-    update('groundupeventspam', not state.groundupeventspam)
-  elseif cmd == 'baseui' then
-    GroundUpSavedVariable.baseui = true
-    ReloadUI()
-  else
-    print('[error] bad command')
   end
-end
+end)()
 
 local editbox
 
