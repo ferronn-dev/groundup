@@ -658,14 +658,26 @@ local run = (function()
     ['dnd'] = function()
       SendChatMessage('', 'DND')
     end,
+    ['echo (.*)'] = function(msg)
+      print('[echo] ' .. msg)
+    end,
     ['factions'] = function()
       for k, v in pairs(state.factions) do
         print('[faction] ' .. k .. ': ' .. v)
       end
     end,
+    ['gossip select option (%d+)'] = function(k)
+      C_GossipInfo.SelectOption(k)
+    end,
     ['noquit'] = function()
       CancelLogout()
       DoEmote('stand')
+    end,
+    ['questlog abandon (%d+)'] = function(k)
+      print('[questlog] abandoning entry ' .. k)
+      SelectQuestLogEntry(k)
+      SetAbandonQuest()
+      AbandonQuest()
     end,
     ['questlog list'] = function()
       for i = 1, GetNumQuestLogEntries() do
@@ -682,26 +694,25 @@ local run = (function()
     ['spam'] = function()
       update('groundupeventspam', not state.groundupeventspam)
     end,
+    ['train (%d+)'] = function(k)
+      BuyTrainerService(k)
+    end,
+    ['%.(.*)'] = function(s)
+      setfenv(loadstring(s, '@'), setmetatable({}, lsmt))()
+    end,
   }
+  local scmds = {}
+  for k, v in pairs(cmds) do
+    scmds['^' .. k .. '$'] = v
+  end
+  local function process(f, s, _, ...)
+    if s ~= nil then
+      f(...)
+    end
+  end
   return function(cmd)
-    if cmd:sub(1, 1) == '.' then
-      setfenv(loadstring(cmd:sub(2), '@'), setmetatable({}, lsmt))()
-    elseif cmd:sub(1, 5) == 'echo ' then
-      print('[echo] ' .. cmd:sub(6))
-    elseif cmd:sub(1, 6) == 'train ' then
-      BuyTrainerService(tonumber(cmd:sub(7)))
-    elseif cmd:sub(1, 21) == 'gossip select option ' then
-      C_GossipInfo.SelectOption(tonumber(cmd:sub(22)))
-    elseif cmd:sub(1, 17) == 'questlog abandon ' then
-      local k = tonumber(cmd:sub(18))
-      print('[questlog] abandoning entry ' .. k)
-      SelectQuestLogEntry(k)
-      SetAbandonQuest()
-      AbandonQuest()
-    elseif cmds[cmd] then
-      cmds[cmd]()
-    else
-      print('[error] bad command')
+    for k, v in pairs(scmds) do
+      process(v, cmd:find(k))
     end
   end
 end)()
