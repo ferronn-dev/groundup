@@ -651,6 +651,16 @@ local run = (function()
     ['afk'] = function()
       SendChatMessage('', 'AFK')
     end,
+    ['bags'] = function()
+      for bag = 0, 4 do
+        for slot = 1, C_Container.GetContainerNumSlots(bag) do
+          local itemLink = C_Container.GetContainerItemLink(bag, slot)
+          if itemLink then
+            print(('[bags][%d][%d] %s'):format(bag, slot, itemLink))
+          end
+        end
+      end
+    end,
     ['baseui'] = function()
       GroundUpSavedVariable.baseui = true
       ReloadUI()

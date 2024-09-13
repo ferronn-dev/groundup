@@ -18,6 +18,12 @@ read_globals = {
   AbandonQuest = {},
   AcceptQuest = {},
   BuyTrainerService = {},
+  C_Container = {
+    fields = {
+      GetContainerItemLink = {},
+      GetContainerNumSlots = {},
+    },
+  },
   C_GossipInfo = {
     fields = {
       CloseGossip = {},
