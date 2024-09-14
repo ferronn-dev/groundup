@@ -123,6 +123,7 @@ read_globals = {
     },
   },
   Mixin = {},
+  NumTaxiNodes = {},
   ReloadUI = {},
   SelectQuestLogEntry = {},
   SendChatMessage = {},
@@ -138,6 +139,10 @@ read_globals = {
       wipe = {},
     },
   },
+  TakeTaxiNode = {},
+  TaxiNodeCost = {},
+  TaxiNodeGetType = {},
+  TaxiNodeName = {},
   UIParent = {
     fields = {
       RegisterEvent = {},

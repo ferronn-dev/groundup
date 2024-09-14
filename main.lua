@@ -464,6 +464,18 @@ local handlers = {
   SPELL_ACTIVATION_OVERLAY_HIDE = nop,
   SPELL_UPDATE_USABLE = nop,
   STORE_PURCHASE_LIST_UPDATED = nop,
+  TAXIMAP_OPENED = function()
+    for i = 1, NumTaxiNodes() do
+      local ty = TaxiNodeGetType(i)
+      if ty == 'REACHABLE' then
+        local name = TaxiNodeName(i)
+        local cost = TaxiNodeCost(i)
+        print(('[taxi][%d] %s (%d)'):format(i, name, cost))
+      elseif ty ~= 'CURRENT' and ty ~= 'DISTANT' then
+        print('[error] unexpected taxi node type ' .. ty)
+      end
+    end
+  end,
   TOYS_UPDATED = nop,
   TRAINER_CLOSED = function()
     assert(state.training)
@@ -703,6 +715,9 @@ local run = (function()
     end,
     ['spam'] = function()
       update('groundupeventspam', not state.groundupeventspam)
+    end,
+    ['taxi (%d+)'] = function(k)
+      TakeTaxiNode(k)
     end,
     ['train (%d+)'] = function(k)
       BuyTrainerService(k)
