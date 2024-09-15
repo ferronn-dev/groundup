@@ -555,6 +555,7 @@ local handlers = {
     assert(unit == 'player')
     print('[questlog] changed')
   end,
+  UNIT_SPELLCAST_SUCCEEDED = nop,
   UNIT_TARGET = function(unit)
     -- Eventually we'll do something interesting with this.
     -- For now it's redundant with PLAYER_TARGET_CHANGED.
