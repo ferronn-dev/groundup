@@ -484,9 +484,9 @@ local handlers = {
   end,
   TRAINER_SHOW = (function()
     -- Trainers should show us everything they can handle.
-    SetTrainerServiceTypeFilter('available', 1)
-    SetTrainerServiceTypeFilter('unavailable', 1)
-    SetTrainerServiceTypeFilter('used', 1)
+    SetTrainerServiceTypeFilter('available', true)
+    SetTrainerServiceTypeFilter('unavailable', true)
+    SetTrainerServiceTypeFilter('used', true)
     local trainershow = false
     return function()
       if trainershow then
