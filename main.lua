@@ -80,6 +80,11 @@ local function update(k, new)
   end
 end
 
+local function checkupdate(k, old, new)
+  assert(state[k] == old, k)
+  state[k] = new
+end
+
 local enumrev = (function()
   local t = {}
   for k, v in pairs(Enum.PlayerInteractionType) do
@@ -478,8 +483,7 @@ local handlers = {
   end,
   TOYS_UPDATED = nop,
   TRAINER_CLOSED = function()
-    assert(state.training)
-    state.training = false
+    checkupdate('training', true, false)
     print('[trainer][closed]')
   end,
   TRAINER_SHOW = (function()
@@ -487,28 +491,26 @@ local handlers = {
     SetTrainerServiceTypeFilter('available', true)
     SetTrainerServiceTypeFilter('unavailable', true)
     SetTrainerServiceTypeFilter('used', true)
-    local trainershow = false
     return function()
-      if trainershow then
-        assert(not state.training)
-        state.training = true
-        print('[trainer] ' .. GetTrainerGreetingText())
-        for i = 1, GetNumTrainerServices() do
-          local name, rank, category, expanded = GetTrainerServiceInfo(i)
-          if expanded ~= 1 then
-            print('[trainer][%d] error: unexpected expanded=0')
-          end
-          if category == 'available' then
-            local lvl = GetTrainerServiceLevelReq(i)
-            local cost = GetTrainerServiceCost(i)
-            print(('[trainer][%d][L%d][%dc] %s(%s)'):format(i, lvl, cost, name, rank or '<>'))
-          end
-        end
-      end
-      -- It fires twice; ignore the first.
-      trainershow = not trainershow
+      checkupdate('training', false, true)
+      print('[trainer][open]')
     end
   end)(),
+  TRAINER_UPDATE = function()
+    assert(state.training)
+    print('[trainer] ' .. GetTrainerGreetingText())
+    for i = 1, GetNumTrainerServices() do
+      local name, rank, category, expanded = GetTrainerServiceInfo(i)
+      if expanded ~= 1 then
+        print('[trainer][%d] error: unexpected expanded=0')
+      end
+      if category == 'available' then
+        local lvl = GetTrainerServiceLevelReq(i)
+        local cost = GetTrainerServiceCost(i)
+        print(('[trainer][%d][L%d][%dc] %s(%s)'):format(i, lvl, cost, name, rank or '<>'))
+      end
+    end
+  end,
   UI_ERROR_MESSAGE = function(id, s)
     local str = GetGameMessageInfo(id)
     assert(_G['LE_GAME_' .. str] == id)
