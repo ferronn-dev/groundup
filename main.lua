@@ -195,22 +195,15 @@ local handlers = {
     assert(state.mousedown[b] == true)
     state.mousedown[b] = nil
   end,
-  GOSSIP_CONFIRM_CANCEL = function()
-    assert(not state.gossipconfirmcancel)
-    state.gossipconfirmcancel = true
-  end,
   GOSSIP_CLOSED = function(continuing)
-    assert(state.gossiping)
-    if not continuing then
-      state.gossiping = false
-      state.gossipconfirmcancel = false
-      print('[gossip][closed]')
-    end
+    checkupdate('gossiping', not continuing, false)
+    print('[gossip][closed]')
+  end,
+  GOSSIP_CONFIRM_CANCEL = function()
+    checkupdate('gossiping', true, false)
   end,
   GOSSIP_SHOW = function()
-    assert(not state.gossiping or state.gossipconfirmcancel)
-    state.gossiping = true
-    state.gossipconfirmcancel = false
+    checkupdate('gossiping', false, true)
     print('[gossip] ' .. C_GossipInfo.GetText())
     local options = C_GossipInfo.GetOptions()
     for _, o in ipairs(options) do
@@ -226,7 +219,10 @@ local handlers = {
     end
     local no, nav, nac = #options, #availableQuests, #activeQuests
     if no == 0 and nav == 0 and nac == 0 then
-      C_GossipInfo.CloseGossip()
+      -- If we do this in the same frame, GOSSIP_CLOSED doesn't fire.
+      C_Timer.After(0, function()
+        C_GossipInfo.CloseGossip()
+      end)
     elseif no == 1 and nav == 0 and nac == 0 then
       print('[gossip] auto-selecting option')
       C_GossipInfo.SelectOption(options[1].gossipOptionID)
