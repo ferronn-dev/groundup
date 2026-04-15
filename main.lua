@@ -226,10 +226,7 @@ local handlers = {
     end
     local no, nav, nac = #options, #availableQuests, #activeQuests
     if no == 0 and nav == 0 and nac == 0 then
-      -- If we do this in the same frame, GOSSIP_CLOSED doesn't fire.
-      C_Timer.After(0, function()
-        C_GossipInfo.CloseGossip()
-      end)
+      C_GossipInfo.CloseGossip()
     elseif no == 1 and nav == 0 and nac == 0 then
       print('[gossip] auto-selecting option')
       C_GossipInfo.SelectOption(options[1].gossipOptionID)
