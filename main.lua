@@ -789,7 +789,11 @@ local insecurecmds = {
 do
   local mainScript = function(_, ev, ...)
     if state.groundupeventspam then
-      print(ev)
+      local t = {}
+      for i = 1, select('#', ...) do
+        t[i] = tostring((select(i, ...)))
+      end
+      print(ev .. ' ' .. table.concat(t, ' '))
     end
     local h = handlers[ev]
     if h then
